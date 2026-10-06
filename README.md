@@ -18,3 +18,5 @@ Discount codes: `KF10` (10%), `FORM2027` (15%).
 - `components/Shot.tsx` procedural editorial "photography" placeholders (replace with real images via next/image).
 - `components/three/*` procedural 3D garments (6 materials), hero, runway, product viewer. Loaded lazily, client-only.
 - Admin (`/admin`) is a front-end demo with local state; wire it to the repository + auth before launch.
+
+Live: https://karrar7311.github.io/kf-store/
