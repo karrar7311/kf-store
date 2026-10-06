@@ -5,7 +5,7 @@ import type { Garment } from "@/lib/products";
 export type View = "front" | "back" | "side" | "detail" | "model" | "fabric" | "lifestyle" | "wide";
 
 /** Garment silhouettes in a 200x260 box. Procedural studio "photography" stand-ins. */
-export const BODY: Record<Garment, string> = {
+export const BODY: Record<string, string> = {
   tee: "M72 34 Q100 50 128 34 L180 58 L164 100 L144 90 L144 226 L56 226 L56 90 L36 100 L20 58 Z",
   hoodie: "M72 40 Q100 54 128 40 L184 74 L172 200 L148 198 L144 116 L144 230 L56 230 L56 116 L52 198 L28 200 L16 74 Z",
   jacket: "M70 36 Q100 52 130 36 L186 70 L176 214 L150 212 L146 116 L146 236 L54 236 L54 116 L50 212 L24 214 L14 70 Z",
@@ -13,7 +13,7 @@ export const BODY: Record<Garment, string> = {
   pants: "M60 22 L140 22 L150 244 L108 244 L100 96 L92 244 L50 244 Z",
   cap: "M44 150 Q44 70 100 66 Q156 70 156 150 L156 160 Q100 150 44 160 Z M40 160 Q100 150 190 178 Q180 196 100 184 Q60 178 40 160 Z",
 };
-export const EXTRA: Partial<Record<Garment, string[]>> = {
+export const EXTRA: Record<string, string[]> = {
   hoodie: ["M70 40 Q100 -4 130 40 Q100 64 70 40Z", "M72 170 L128 170 L134 206 L66 206 Z"],
   jacket: ["M74 38 L100 70 L126 38 L128 52 L100 84 L72 52Z", "M100 70 L100 236"],
   bomber: ["M54 190 L146 190 L146 208 L54 208Z", "M74 40 Q100 66 126 40 L126 52 Q100 76 74 52Z", "M100 66 L100 206"],
@@ -46,11 +46,11 @@ export default function ShotSvg({ garment, color, view: viewIn = "front", tone =
 
   const garmentSvg = (
     <g transform={view === "side" ? "translate(100 0) scale(.56 1) translate(-100 0)" : view === "model" ? "translate(0 6)" : undefined}>
-      <path d={BODY[garment]} fill={`url(#g${id})`} stroke="rgba(0,0,0,.45)" strokeWidth=".8" />
+      <path d={BODY[garment] ?? BODY.tee} fill={`url(#g${id})`} stroke="rgba(0,0,0,.45)" strokeWidth=".8" />
       {(EXTRA[garment] ?? []).map((d, i) => (
         <path key={i} d={d} fill={i === 0 && garment !== "pants" ? shade(color, -0.05) : "none"} stroke={stitch} strokeWidth=".9" strokeDasharray={i > 0 ? "2.2 1.6" : undefined} />
       ))}
-      {!isCap && <path d={BODY[garment]} fill={`url(#f${id})`} opacity=".55" />}
+      {!isCap && <path d={BODY[garment] ?? BODY.tee} fill={`url(#f${id})`} opacity=".55" />}
       {!isCap && garment !== "pants" && <path d="M56 226 L144 226 M20 58 L36 100" stroke={stitch} strokeWidth=".7" strokeDasharray="2 1.5" fill="none" />}
       {view === "back" ? null : garment !== "cap" && <text x="100" y={garment === "pants" ? 58 : 82} textAnchor="middle" fontSize="7" letterSpacing="2" fill={light ? "rgba(0,0,0,.5)" : "rgba(255,255,255,.55)"} fontFamily="Georgia, serif">K&amp;F</text>}
       {isCap && <text x="100" y="124" textAnchor="middle" fontSize="12" letterSpacing="2" fill={light ? "rgba(0,0,0,.5)" : "rgba(255,255,255,.6)"} fontFamily="Georgia, serif">K&amp;F</text>}
@@ -76,7 +76,7 @@ export default function ShotSvg({ garment, color, view: viewIn = "front", tone =
         <pattern id={`w${id}`} width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
           <rect width="3" height="3" fill={color} /><rect width="1.5" height="3" fill={shade(color, light ? -0.1 : 0.07)} />
         </pattern>
-        <clipPath id={`c${id}`}><path d={BODY[garment]} /></clipPath>
+        <clipPath id={`c${id}`}><path d={BODY[garment] ?? BODY.tee} /></clipPath>
       </defs>
       <rect x="-400" y="-400" width="1200" height="1200" fill={`url(#bg${id})`} />
 

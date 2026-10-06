@@ -38,7 +38,7 @@ export default function ProductView({ p }: { p: Product }) {
     ["returns", "Free returns within 30 days of delivery. Items must be unworn with tags attached."]];
 
   return (
-    <div className="pt-24 md:pt-28">
+    <div className="pt-20 md:pt-28">
       <div className="wrap grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-16">
         {/* gallery */}
         <div className="min-w-0">
@@ -49,7 +49,8 @@ export default function ProductView({ p }: { p: Product }) {
             <span className="absolute bottom-4 left-4 text-[10px] tracking-[0.25em] text-fog">{String(vi + 1).padStart(2, "0")} / {String(VIEWS.length).padStart(2, "0")} — {VIEWS[vi][1].toUpperCase()}</span>
             <button onClick={(e) => { e.stopPropagation(); setV3(true); }} data-cursor="3D" className="glass absolute bottom-4 right-4 px-5 py-3 text-[10px] uppercase tracking-[0.26em] hover:bg-bone hover:text-ink">View in 3D</button>
           </div>
-          <div className="no-scrollbar mt-3 flex gap-2 overflow-x-auto">
+          <div className="mt-3 flex justify-center gap-1.5 lg:hidden">{VIEWS.map((_, i) => <span key={i} className={`h-1 rounded-full transition-all ${i === vi ? "w-6 bg-bone" : "w-1.5 bg-white/25"}`} />)}</div>
+          <div className="no-scrollbar mt-3 hidden gap-2 overflow-x-auto lg:flex">
             {VIEWS.map(([v, l], i) => <button key={v} aria-label={l} onClick={() => setVi(i)} className={`aspect-[4/5] w-20 shrink-0 overflow-hidden border transition md:w-24 ${i === vi ? "border-bone" : "border-transparent opacity-60 hover:opacity-100"}`}><Shot garment={p.garment} color={color.hex} view={v} /></button>)}
           </div>
         </div>
@@ -65,7 +66,7 @@ export default function ProductView({ p }: { p: Product }) {
           <div className="flex gap-3">{p.colors.map((c, i) => <button key={c.name} aria-label={c.name} aria-pressed={i === ci} onClick={() => setCi(i)} className={`h-9 w-9 rounded-full border transition ${i === ci ? "ring-1 ring-bone ring-offset-2 ring-offset-ink" : "border-white/30"}`} style={{ background: c.hex }} />)}</div>
 
           <div className="mb-3 mt-8 flex justify-between"><p className={`eyebrow ${err ? "!text-red-400" : ""}`}>{err ? "Please select a size" : "Size"}</p><button onClick={() => setGuide(true)} className="text-[10px] uppercase tracking-[0.2em] text-fog underline underline-offset-4 hover:text-bone">Size guide</button></div>
-          <div className="grid grid-cols-5 gap-2" role="radiogroup" aria-label="Size">{p.sizes.map((s) => { const out = (p.stock[s] ?? 0) === 0; return <button key={s} role="radio" aria-checked={size === s} disabled={out} onClick={() => { setSize(s); setErr(false); }} className={`border py-3 text-xs tracking-widest transition ${size === s ? "border-bone bg-bone text-ink" : "border-white/20 hover:border-bone"} ${out ? "line-through opacity-30" : ""}`}>{s}</button>; })}</div>
+          <div className={`grid gap-2 ${p.sizes.length <= 1 ? "grid-cols-1" : p.sizes.length === 4 ? "grid-cols-4" : "grid-cols-5"}`} role="radiogroup" aria-label="Size">{p.sizes.map((s) => { const out = (p.stock[s] ?? 0) === 0; return <button key={s} role="radio" aria-checked={size === s} disabled={out} onClick={() => { setSize(s); setErr(false); }} className={`border py-3.5 text-xs tracking-widest transition ${size === s ? "border-bone bg-bone text-ink" : "border-white/20 hover:border-bone"} ${out ? "line-through opacity-30" : ""}`}>{s}</button>; })}</div>
           {low && <p className="mt-3 text-xs text-burgundy brightness-200">Only {p.stock[size!]} left in {size}</p>}
 
           <div className="mt-8 flex gap-3">
@@ -88,6 +89,12 @@ export default function ProductView({ p }: { p: Product }) {
 
       <section className="wrap py-28"><h2 className="display mb-10 text-4xl md:text-6xl"><Lines lines={["Complete the look"]} /></h2>
         <div className="grid grid-cols-2 gap-x-3 gap-y-10 md:grid-cols-4 md:gap-x-5">{products.filter((x) => x.slug !== p.slug).slice(0, 4).map((x, i) => <ProductCard key={x.slug} p={x} index={i} />)}</div></section>
+
+      {/* mobile sticky buy bar */}
+      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t border-white/10 bg-ink/90 p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur-xl lg:hidden">
+        <div className="min-w-0 flex-1"><p className="truncate text-xs">{p.name.replace("K&F ", "")}</p><p className="text-[11px] text-fog">{money(p.price)} · {color.name}{size ? ` · ${size}` : ""}</p></div>
+        <button onClick={() => { if (!size) { setErr(true); window.scrollTo({ top: 520, behavior: "smooth" }); return; } if (addToCart()) setTimeout(() => setCartOpen(true), 900); }} className="btn btn-solid !px-7 !py-4">{size ? "Add to cart" : "Select size"}</button>
+      </div>
 
       {/* fullscreen gallery */}
       <AnimatePresence>

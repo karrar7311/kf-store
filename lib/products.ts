@@ -1,4 +1,4 @@
-export type Garment = "tee" | "hoodie" | "jacket" | "pants" | "cap" | "bomber";
+export type Garment = "tee" | "hoodie" | "jacket" | "pants" | "cap" | "bomber" | "beanie" | "tote" | "sunglasses" | "belt" | "scarf";
 export type Material = "cotton" | "denim" | "leather" | "nylon" | "fleece" | "wool";
 export type Category = "outerwear" | "tops" | "bottoms" | "essentials" | "accessories";
 
@@ -108,6 +108,51 @@ export const products: Product[] = [
     details: { material: "80% wool, 20% nylon.", fit: "Relaxed, hip length. Model wears size S.", care: "Dry clean recommended." },
     rating: 4.6, reviews: 33, createdAt: "2027-03-10",
   },
+  {
+    slug: "essential-beanie", name: "K&F Essential Beanie", price: 38, gender: "unisex",
+    category: "accessories", garment: "beanie", material: "wool", badge: "NEW", collection: "Essentials",
+    colors: [{ name: "Black", hex: "#141416" }, { name: "Ash", hex: "#77787e" }, { name: "Bone", hex: "#e0dbd0" }, { name: "Oxblood", hex: "#4b1620" }],
+    sizes: ["ONE SIZE"], stock: { "ONE SIZE": 80 },
+    description: "A double-layer merino-blend beanie with a deep fold-over cuff and a woven K&F label. Dense enough to hold heat, soft enough to forget you are wearing it.",
+    details: { material: "70% merino wool, 30% recycled nylon. Double-knit.", fit: "One size, stretch fit. Cuff can be worn folded or unfolded.", care: "Hand wash cold. Dry flat." },
+    rating: 4.8, reviews: 121, createdAt: "2027-03-12",
+  },
+  {
+    slug: "signature-tote", name: "K&F Signature Tote", price: 55, gender: "unisex",
+    category: "accessories", garment: "tote", material: "cotton", collection: "Signature",
+    colors: [{ name: "Bone", hex: "#e3ded3" }, { name: "Black", hex: "#17171a" }],
+    sizes: ["ONE SIZE"], stock: { "ONE SIZE": 45 },
+    description: "A structured heavy canvas tote with reinforced handles, an inner zip pocket and a quiet K&F print. Large enough for a laptop and a gym kit, clean enough for the city.",
+    details: { material: "100% organic cotton canvas, 16oz. Cotton-webbing handles.", fit: "38 × 40 × 12 cm. 22 cm handle drop.", care: "Spot clean. Air dry." },
+    rating: 4.7, reviews: 64, createdAt: "2027-03-14",
+  },
+  {
+    slug: "studio-sunglasses", name: "K&F Studio Sunglasses", price: 95, gender: "unisex",
+    category: "accessories", garment: "sunglasses", material: "nylon", badge: "LIMITED", collection: "Campaign 2027",
+    colors: [{ name: "Jet", hex: "#0f0f11" }, { name: "Tortoise", hex: "#5c3a22" }],
+    sizes: ["ONE SIZE"], stock: { "ONE SIZE": 30 },
+    description: "Oversized acetate frames with polarised, UV400 lenses and silver K&F temple plates. Cut in Italy, finished by hand.",
+    details: { material: "Bio-acetate frame, polarised mineral lenses, stainless hinges.", fit: "Wide. Lens width 56 mm, bridge 18 mm, temple 145 mm.", care: "Clean with the supplied cloth. Store in the case." },
+    rating: 4.9, reviews: 38, createdAt: "2027-03-16",
+  },
+  {
+    slug: "leather-belt", name: "K&F Leather Belt", price: 75, gender: "unisex",
+    category: "accessories", garment: "belt", material: "leather", collection: "Signature",
+    colors: [{ name: "Black", hex: "#111113" }, { name: "Burgundy", hex: "#4a1822" }],
+    sizes: ["80", "90", "100", "110"], stock: { "80": 12, "90": 18, "100": 16, "110": 8 },
+    description: "A full-grain leather belt with a brushed silver buckle and a hand-burnished edge. Made to be worn daily and to age well.",
+    details: { material: "Vegetable-tanned full-grain leather, solid brass buckle with silver plating.", fit: "30 mm width. Choose your waist size in cm.", care: "Wipe with a dry cloth. Condition twice a year." },
+    rating: 4.8, reviews: 52, createdAt: "2027-03-18",
+  },
+  {
+    slug: "wool-scarf", name: "K&F Wool Scarf", price: 85, gender: "unisex",
+    category: "accessories", garment: "scarf", material: "wool", collection: "Signature",
+    colors: [{ name: "Charcoal", hex: "#34353a" }, { name: "Camel", hex: "#a68e6a" }, { name: "Oxblood", hex: "#4b1620" }],
+    sizes: ["ONE SIZE"], stock: { "ONE SIZE": 40 },
+    description: "An oversized brushed-wool scarf with hand-twisted fringe. Wide enough to wrap twice, light enough to wear indoors.",
+    details: { material: "100% extra-fine merino wool, brushed finish.", fit: "200 × 45 cm.", care: "Dry clean or hand wash cold. Dry flat." },
+    rating: 4.9, reviews: 47, createdAt: "2027-03-20",
+  },
 ];
 
 export const collections = [
@@ -118,7 +163,7 @@ export const collections = [
   { key: "tops", label: "Tops", href: "/shop?category=tops", tone: "#2a2a2a", garment: "hoodie" as Garment },
   { key: "bottoms", label: "Bottoms", href: "/shop?category=bottoms", tone: "#18191c", garment: "pants" as Garment },
   { key: "essentials", label: "Essentials", href: "/shop?category=essentials", tone: "#2f2d2a", garment: "tee" as Garment },
-  { key: "accessories", label: "Accessories", href: "/shop?category=accessories", tone: "#222126", garment: "cap" as Garment },
+  { key: "accessories", label: "Accessories", href: "/shop?category=accessories", tone: "#222126", garment: "sunglasses" as Garment },
 ];
 
 export const lookbook = [

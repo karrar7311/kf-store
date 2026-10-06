@@ -11,15 +11,21 @@ import type { Garment, Material } from "@/lib/products";
  * Offline render stage: /studio?garment=hoodie&color=16161a&material=fleece&view=front
  * scripts/render.mjs screenshots this page to produce the site's product photography.
  */
-const DIST: Record<Garment, number> = { hoodie: 9.2, tee: 8.2, jacket: 9.8, bomber: 8.6, pants: 10.4, cap: 7.2 };
-const CENTER: Record<Garment, number> = { hoodie: -0.05, tee: 0.1, jacket: 0.05, bomber: 0.15, pants: -0.1, cap: 0.25 };
+const DIST: Record<Garment, number> = { hoodie: 9.2, tee: 8.2, jacket: 9.8, bomber: 8.6, pants: 10.4, cap: 7.2, beanie: 6.6, tote: 8.6, sunglasses: 8.4, belt: 8.4, scarf: 10 };
+const CENTER: Record<Garment, number> = { hoodie: -0.05, tee: 0.1, jacket: 0.05, bomber: 0.15, pants: -0.1, cap: 0.25, beanie: 0.25, tote: 0, sunglasses: 0, belt: 0, scarf: 0 };
+const GROUND: Partial<Record<Garment, number>> = { cap: -0.62, pants: -1.75, beanie: -0.62, tote: -0.98, sunglasses: -0.5, belt: -1.3, scarf: -1.5 };
+/** close-up target + distance for accessories */
+const DET: Partial<Record<Garment, { t: number[]; d: number }>> = { beanie: { t: [0, -0.15, 0.9], d: 2.6 }, tote: { t: [0, 0, 0.3], d: 3.2 }, sunglasses: { t: [0.62, 0, 0.1], d: 2.2 }, belt: { t: [0, 1.1, 0.03], d: 2.2 }, scarf: { t: [0, -1.05, 0.25], d: 2.8 } };
 
 function Rig({ view, garment }: { view: string; garment: Garment }) {
   const { camera } = useThree();
   let frames = 0;
   useFrame(() => {
     const d = DIST[garment], cy = CENTER[garment];
-    if (view === "detail") { camera.position.set(-0.4, cy + 0.7, d * 0.28); camera.lookAt(-0.2, cy + 0.55, 0.3); }
+    const dt = DET[garment];
+    if (dt && view === "detail") { camera.position.set(dt.t[0] - 0.2, dt.t[1] + 0.25, dt.t[2] + dt.d); camera.lookAt(dt.t[0], dt.t[1], dt.t[2]); }
+    else if (dt && view === "fabric") { camera.position.set(dt.t[0], dt.t[1] + 0.05, dt.t[2] + dt.d * 0.4); camera.lookAt(dt.t[0], dt.t[1], dt.t[2]); }
+    else if (view === "detail") { camera.position.set(-0.4, cy + 0.7, d * 0.28); camera.lookAt(-0.2, cy + 0.55, 0.3); }
     else if (view === "fabric") { camera.position.set(0.15, cy + 0.2, d * 0.11); camera.lookAt(0.1, cy + 0.15, 0.35); }
     else if (view === "wide") { camera.position.set(0.2, cy + 0.1, d * 0.78); camera.lookAt(0.2, cy, 0); }
     else if (view === "lifestyle") { camera.position.set(-1.2, cy + 0.2, d * 1.15); camera.lookAt(0.9, cy, 0); }
@@ -38,7 +44,7 @@ function Stage() {
   const material = (q.get("material") ?? "fleece") as Material;
   const view = q.get("view") ?? "front";
   const lum = new THREE.Color(color).getHSL({ h: 0, s: 0, l: 0 }).l;
-  const rotY = view === "back" ? Math.PI : view === "side" ? Math.PI / 2 : view === "model" ? 0.55 : view === "wide" ? -0.45 : view === "detail" ? 0.12 : view === "lifestyle" ? -0.5 : 0;
+  const rotY = view === "back" ? Math.PI : view === "side" ? (garment === "belt" ? 0.9 : Math.PI / 2) : view === "model" ? (garment === "sunglasses" ? 0.28 : 0.55) : view === "wide" ? -0.45 : view === "detail" ? 0.12 : view === "lifestyle" ? -0.5 : 0;
   const bg = lum > 0.55 ? "radial-gradient(ellipse at 50% 38%, #4a4a50 0%, #26262a 55%, #101012 100%)"
     : view === "model" || view === "lifestyle" || view === "wide" ? "radial-gradient(ellipse at 60% 30%, #3b3238 0%, #1d1a1d 55%, #0b0a0c 100%)"
       : "radial-gradient(ellipse at 50% 38%, #5a5a62 0%, #34343a 50%, #141416 100%)";
@@ -63,7 +69,7 @@ function Stage() {
         <group rotation={[0, rotY, 0]} position={view === "lifestyle" ? [1.2, 0, 0] : view === "wide" ? [1.9, 0, 0] : [0, 0, 0]}>
           <Garment3D garment={garment} color={color} material={material} stitching={view !== "fabric"} />
         </group>
-        <ContactShadows position={[0, garment === "cap" ? -0.62 : garment === "pants" ? -1.75 : -1.5, 0]} opacity={0.75} scale={12} blur={2.6} far={5} resolution={1024} />
+        <ContactShadows position={[0, GROUND[garment] ?? -1.5, 0]} opacity={0.75} scale={12} blur={2.6} far={5} resolution={1024} />
         <Rig view={view} garment={garment} />
       </Canvas>
     </div>

@@ -11,8 +11,7 @@ function Listing() {
   const sp = useSearchParams(), router = useRouter();
   const wishlist = useStore((s) => s.wishlist);
   const [sort, setSort] = useState<string>("featured");
-  const [open, setOpen] = useState(false);
-  const gender = sp.get("gender"), category = sp.get("category"), isNew = sp.get("filter") === "new", wish = sp.get("wishlist");
+    const gender = sp.get("gender"), category = sp.get("category"), isNew = sp.get("filter") === "new", wish = sp.get("wishlist");
   const color = sp.get("color");
   const set = (k: string, v: string | null) => { const n = new URLSearchParams(sp.toString()); v ? n.set(k, v) : n.delete(k); router.replace(`/shop?${n}`, { scroll: false }); };
 
@@ -24,7 +23,7 @@ function Listing() {
     return l;
   }, [gender, category, isNew, wish, wishlist, sort, color]);
 
-  const chip = (label: string, active: boolean, on: () => void) => <button key={label} onClick={on} aria-pressed={active} className={`border px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition ${active ? "border-bone bg-bone text-ink" : "border-white/15 text-fog hover:border-bone hover:text-bone"}`}>{label}</button>;
+  const chip = (label: string, active: boolean, on: () => void) => <button key={label} onClick={on} aria-pressed={active} className={`shrink-0 border px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] transition ${active ? "border-bone bg-bone text-ink" : "border-white/15 text-fog hover:border-bone hover:text-bone"}`}>{label}</button>;
   const title = wish ? "Wishlist" : category ? category : gender ? gender : isNew ? "New arrivals" : "All products";
   const allColors = Array.from(new Set(products.flatMap((p) => p.colors.map((c) => c.name))));
 
@@ -34,7 +33,7 @@ function Listing() {
       <h1 className="display mt-3 text-6xl capitalize md:text-9xl">{title}</h1>
       <div className="sticky top-[60px] z-30 -mx-5 mt-10 border-y border-white/10 bg-ink/85 px-5 py-4 backdrop-blur-xl md:-mx-10 md:px-10">
         <div className="flex items-center justify-between">
-          <button className="eyebrow !text-bone md:hidden" onClick={() => setOpen(!open)}>Filters {open ? "−" : "+"}</button>
+          <span className="eyebrow !text-bone md:hidden">Filter</span>
           <div className="hidden flex-wrap gap-2 md:flex">
             {chip("All", !gender && !category && !isNew && !wish, () => router.replace("/shop"))}
             {["men", "women"].map((g) => chip(g, gender === g, () => set("gender", gender === g ? null : g)))}
@@ -45,7 +44,12 @@ function Listing() {
             <select value={sort} onChange={(e) => setSort(e.target.value)} className="bg-transparent text-bone outline-none">{SORTS.map(([v, l]) => <option key={v} value={v} className="bg-char">{l}</option>)}</select>
           </label>
         </div>
-        {open && <div className="mt-4 flex flex-wrap gap-2 md:hidden">{["men", "women"].map((g) => chip(g, gender === g, () => set("gender", gender === g ? null : g)))}{["outerwear", "tops", "bottoms", "essentials", "accessories"].map((c) => chip(c, category === c, () => set("category", category === c ? null : c)))}</div>}
+        <div className="no-scrollbar -mx-5 mt-3 flex gap-2 overflow-x-auto px-5 md:hidden">
+          {chip("All", !gender && !category && !isNew && !wish, () => router.replace("/shop"))}
+          {["men", "women"].map((g) => chip(g, gender === g, () => set("gender", gender === g ? null : g)))}
+          {["outerwear", "tops", "bottoms", "essentials", "accessories"].map((c) => chip(c, category === c, () => set("category", category === c ? null : c)))}
+          {chip("New", isNew, () => set("filter", isNew ? null : "new"))}
+        </div>
         <div className="mt-3 hidden flex-wrap items-center gap-2 md:flex"><span className="mr-2 text-[10px] uppercase tracking-[0.2em] text-fog">Color</span>{allColors.map((c) => chip(c, color?.toLowerCase() === c.toLowerCase(), () => set("color", color?.toLowerCase() === c.toLowerCase() ? null : c)))}</div>
       </div>
       <p className="mt-6 text-xs text-fog" aria-live="polite">{list.length} {list.length === 1 ? "piece" : "pieces"}</p>

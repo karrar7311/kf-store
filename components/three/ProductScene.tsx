@@ -15,7 +15,7 @@ export default function ProductScene({ garment, color, material, stitching, lit,
       <color attach="background" args={["#0c0c0e"]} />
       <Suspense fallback={<Html center className="text-[10px] tracking-[0.3em] text-fog">LOADING</Html>}>
         <StudioLights dim={!lit} warm={!lit} />
-        <group scale={garment === "cap" ? 1.5 : 1.05}><Garment3D garment={garment} color={color} material={material} stitching={stitching} /></group>
+        <group scale={({ cap: 1.5, beanie: 1.3, tote: 1.15, sunglasses: 1.45, belt: 1.0, scarf: 1.0 } as Record<string, number>)[garment] ?? 1.05}><Garment3D garment={garment} color={color} material={material} stitching={stitching} /></group>
       </Suspense>
       <OrbitControls ref={controlsRef} enablePan={false} minDistance={2.5} maxDistance={9} autoRotate={autoRotate} autoRotateSpeed={1.1} enableDamping />
     </Canvas>

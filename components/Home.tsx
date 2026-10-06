@@ -197,11 +197,29 @@ function Runway() {
   );
 }
 
+function Rail({ items }: { items: typeof products }) {
+  return (
+    <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 md:mx-0 md:grid md:grid-cols-4 md:gap-x-5 md:gap-y-12 md:overflow-visible md:px-0 lg:grid-cols-6">
+      {items.map((p, i) => <div key={p.slug} className="w-[62vw] shrink-0 snap-start sm:w-[40vw] md:w-auto"><ProductCard p={p} index={i} /></div>)}
+    </div>
+  );
+}
+
+function Accessories() {
+  const list = products.filter((p) => p.category === "accessories");
+  return (
+    <section className="wrap py-24 md:py-36">
+      <div className="mb-10 flex items-end justify-between"><div><p className="eyebrow">Finish the form</p><h2 className="display mt-3 text-5xl md:text-8xl"><Lines lines={["Accessories"]} /></h2></div><Link href="/shop?category=accessories" className="eyebrow hover:text-bone">Shop all →</Link></div>
+      <Rail items={list} />
+    </section>
+  );
+}
+
 function Featured() {
   return (
     <section className="wrap py-24 md:py-40">
       <div className="mb-12 flex items-end justify-between"><h2 className="display text-5xl md:text-8xl"><Lines lines={["The essentials"]} /></h2><Link href="/shop" className="eyebrow hover:text-bone">Shop all →</Link></div>
-      <div className="grid grid-cols-2 gap-x-3 gap-y-12 md:grid-cols-4 md:gap-x-5">{products.filter((p) => p.badge || p.category === "essentials").slice(0, 4).map((p, i) => <ProductCard key={p.slug} p={p} index={i} />)}</div>
+      <Rail items={products.filter((p) => p.category !== "accessories" && (p.badge || p.category === "essentials")).slice(0, 4)} />
     </section>
   );
 }
@@ -213,6 +231,7 @@ export default function Home() {
       <Manifesto />
       <Editorial />
       <Collections />
+      <Accessories />
       <Configurator />
       <Campaign />
       <Runway />

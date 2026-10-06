@@ -197,7 +197,7 @@ export function SearchOverlay() {
   useEffect(() => { const k = (e: KeyboardEvent) => { if (e.key === "Escape") setSearchOpen(false); if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); setSearchOpen(true); } }; window.addEventListener("keydown", k); return () => window.removeEventListener("keydown", k); }, [setSearchOpen]);
   const term = q.trim().toLowerCase();
   const results = term ? products.filter((p) => [p.name, p.category, p.collection, p.gender, p.garment, p.material, ...p.colors.map((c) => c.name)].join(" ").toLowerCase().includes(term)) : [];
-  const suggestions = ["Hoodie", "Outerwear", "Black", "Essentials", "Leather", "Campaign 2027"];
+  const suggestions = ["Hoodie", "Accessories", "Sunglasses", "Beanie", "Scarf", "Leather", "Black", "Campaign 2027"];
   return (
     <AnimatePresence>
       {searchOpen && (
@@ -254,5 +254,35 @@ export function Footer() {
       </div>
       <div className="wrap flex flex-col justify-between gap-3 border-t border-white/10 py-6 text-[11px] tracking-[0.18em] text-fog md:flex-row"><span>© 2027 K&amp;F. ALL RIGHTS RESERVED.</span><span>PRIVACY · TERMS · COOKIES</span></div>
     </footer>
+  );
+}
+
+
+/* ---------- Mobile tab bar (app-style navigation) ---------- */
+export function MobileTabBar() {
+  const path = usePathname();
+  const { cart, wishlist, setCartOpen, setSearchOpen } = useStore();
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  if (["/admin", "/studio", "/checkout", "/product"].some((p) => path.startsWith(p))) return null;
+  const count = hydrated ? cart.reduce((a, c) => a + c.qty, 0) : 0;
+  const wish = hydrated ? wishlist.length : 0;
+  const Item = ({ label, d, active, badge, ...rest }: { label: string; d: string; active?: boolean; badge?: number } & ({ href: string } | { onClick: () => void })) => {
+    const inner = (
+      <span className={`relative flex flex-col items-center gap-1 py-2 text-[9px] uppercase tracking-[0.18em] transition-colors ${active ? "text-bone" : "text-fog"}`}>
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3"><path d={d} /></svg>{label}
+        {!!badge && <span className="absolute right-[22%] top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-bone px-1 text-[9px] text-ink">{badge}</span>}
+      </span>
+    );
+    return "href" in rest ? <Link href={rest.href} className="flex-1">{inner}</Link> : <button onClick={rest.onClick} className="flex-1">{inner}</button>;
+  };
+  return (
+    <nav aria-label="Quick navigation" className="fixed inset-x-0 bottom-0 z-40 flex border-t border-white/10 bg-ink/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden">
+      <Item label="Home" href="/" active={path === "/"} d="M4 11l8-7 8 7v9H4v-9Z" />
+      <Item label="Shop" href="/shop" active={path.startsWith("/shop") && !path.includes("wishlist")} d="M4 6h16M4 12h16M4 18h10" />
+      <Item label="Search" onClick={() => setSearchOpen(true)} d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM21 21l-5-5" />
+      <Item label="Saved" href="/shop?wishlist=1" badge={wish} d="M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.7-8 11-8 11Z" />
+      <Item label="Bag" onClick={() => setCartOpen(true)} badge={count} d="M5 8h14l-1 12H6L5 8ZM9 8V6a3 3 0 0 1 6 0v2" />
+    </nav>
   );
 }

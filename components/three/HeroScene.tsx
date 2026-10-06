@@ -1,6 +1,6 @@
 "use client";
 import { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import * as THREE from "three";
 import Garment3D from "./Garment3D";
@@ -8,6 +8,9 @@ import { Particles, StudioLights } from "./Studio";
 
 function Rig({ scroll }: { scroll: React.MutableRefObject<number> }) {
   const g = useRef<THREE.Group>(null);
+  const { size } = useThree();
+  const aspect = size.width / size.height;
+  const sc = aspect < 0.8 ? 0.5 : aspect < 1.2 ? 0.62 : 0.72;
   useFrame((s, d) => {
     const t = s.clock.elapsedTime;
     const px = s.pointer.x, py = s.pointer.y, sc = scroll.current;
@@ -20,7 +23,7 @@ function Rig({ scroll }: { scroll: React.MutableRefObject<number> }) {
   });
   return (
     <Float speed={1.1} rotationIntensity={0.08} floatIntensity={0.5}>
-      <group ref={g} scale={0.72} position={[0, 0.12, 0]}><Garment3D garment="hoodie" color="#1a1a1f" material="fleece" /></group>
+      <group ref={g} scale={sc} position={[0, 0.12, 0]}><Garment3D garment="hoodie" color="#1a1a1f" material="fleece" /></group>
     </Float>
   );
 }

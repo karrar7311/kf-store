@@ -281,5 +281,61 @@
   "wide": {
    "131315": "cap-131315-wide.jpg"
   }
+ },
+ "beanie": {
+  "front": {
+   "141416": "beanie-141416-front.jpg",
+   "77787e": "beanie-77787e-front.jpg",
+   "e0dbd0": "beanie-e0dbd0-front.jpg",
+   "4b1620": "beanie-4b1620-front.jpg"
+  },
+  "model": {
+   "141416": "beanie-141416-model.jpg",
+   "77787e": "beanie-77787e-model.jpg",
+   "e0dbd0": "beanie-e0dbd0-model.jpg",
+   "4b1620": "beanie-4b1620-model.jpg"
+  }
+ },
+ "tote": {
+  "front": {
+   "e3ded3": "tote-e3ded3-front.jpg",
+   "17171a": "tote-17171a-front.jpg"
+  },
+  "model": {
+   "e3ded3": "tote-e3ded3-model.jpg",
+   "17171a": "tote-17171a-model.jpg"
+  }
+ },
+ "sunglasses": {
+  "front": {
+   "0f0f11": "sunglasses-0f0f11-front.jpg",
+   "5c3a22": "sunglasses-5c3a22-front.jpg"
+  },
+  "model": {
+   "0f0f11": "sunglasses-0f0f11-model.jpg",
+   "5c3a22": "sunglasses-5c3a22-model.jpg"
+  }
+ },
+ "belt": {
+  "front": {
+   "111113": "belt-111113-front.jpg",
+   "4a1822": "belt-4a1822-front.jpg"
+  },
+  "model": {
+   "111113": "belt-111113-model.jpg",
+   "4a1822": "belt-4a1822-model.jpg"
+  }
+ },
+ "scarf": {
+  "front": {
+   "34353a": "scarf-34353a-front.jpg",
+   "a68e6a": "scarf-a68e6a-front.jpg",
+   "4b1620": "scarf-4b1620-front.jpg"
+  },
+  "model": {
+   "34353a": "scarf-34353a-model.jpg",
+   "a68e6a": "scarf-a68e6a-model.jpg",
+   "4b1620": "scarf-4b1620-model.jpg"
+  }
  }
 }
