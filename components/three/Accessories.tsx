@@ -36,9 +36,9 @@ function stripeTexture(color: string) {
   const t = new THREE.CanvasTexture(c); t.anisotropy = 8; t.colorSpace = THREE.SRGBColorSpace; return t;
 }
 
-interface P { garment: Garment; color: string; material: Material; stitching?: boolean }
+interface P { garment: Garment; color: string; material: Material; stitching?: boolean; worn?: boolean }
 
-export default function Accessory({ garment, color, material, stitching = true }: P) {
+export default function Accessory({ garment, color, material, stitching = true, worn = false }: P) {
   const col = useMemo(() => new THREE.Color(color), [color]);
   const dark = useMemo(() => col.clone().multiplyScalar(0.78), [col]);
   const light = col.getHSL({ h: 0, s: 0, l: 0 }).l > 0.6;
@@ -77,12 +77,12 @@ export default function Accessory({ garment, color, material, stitching = true }
     if (garment !== "belt") return null;
     const R = 1.12, gap = 0.3, pts: THREE.Vector3[] = [];
     for (let i = 0; i <= 140; i++) { const th = Math.PI / 2 + gap + (i / 140) * (Math.PI * 2 - gap * 2); pts.push(new V(R * Math.cos(th), R * Math.sin(th), 0)); }
-    const strap = loft(pts, pts.map(() => 0.15), pts.map(() => 0.028), { seg: 20, fold: 0.001 });
+    const strap = loft(pts, pts.map(() => (worn ? 0.028 : 0.15)), pts.map(() => (worn ? 0.15 : 0.028)), { seg: 20, fold: 0.001 });
     const stitch = (r: number) => Array.from({ length: 141 }, (_, i) => { const th = Math.PI / 2 + gap + 0.05 + (i / 140) * (Math.PI * 2 - gap * 2 - 0.1); return new V(r * Math.cos(th), r * Math.sin(th), 0.031); });
     const holes = Array.from({ length: 5 }, (_, i) => { const th = Math.PI / 2 - gap - 0.03 - i * 0.075; return new V(R * Math.cos(th), R * Math.sin(th), 0); });
     const bucklePos: [number, number] = [0, R];
     return { strap, stitchA: stitch(R - 0.1), stitchB: stitch(R + 0.1), holes, bucklePos, buckle: new THREE.ExtrudeGeometry(rrect(0.46, 0.4, 0.07, [0.34, 0.28, 0.04]), { depth: 0.05, bevelEnabled: true, bevelSize: 0.015, bevelThickness: 0.015, bevelSegments: 4 }) };
-  }, [garment]);
+  }, [garment, worn]);
 
   /* ---------------- scarf ---------------- */
   const scarf = useMemo(() => {

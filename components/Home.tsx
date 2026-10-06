@@ -141,6 +141,19 @@ function Configurator() {
   );
 }
 
+function FittingRoom() {
+  return (
+    <section className="wrap py-24 md:py-36">
+      <div className="grid items-center gap-10 border border-white/10 bg-char p-8 md:grid-cols-2 md:p-16">
+        <div><p className="eyebrow">Fitting room</p><h2 className="display mt-4 text-5xl md:text-7xl"><Lines lines={["See it on.", "Before it ships."]} /></h2>
+          <p className="mt-6 max-w-md text-sm leading-relaxed text-fog">Dress a model in any K&amp;F outfit. Mix tops, bottoms and accessories, change colour, size, height and skin tone, then add the whole look to your bag.</p>
+          <div className="mt-8"><Magnetic><Link href="/try-on" className="btn btn-solid">Enter the fitting room</Link></Magnetic></div></div>
+        <Link href="/try-on" data-cursor="TRY ON" className="relative block aspect-[4/5] overflow-hidden bg-graphite"><Shot garment="hoodie" color="#16161a" view="model" sizes="(max-width:768px) 90vw, 40vw" /><span className="glass absolute bottom-4 left-4 px-4 py-2 text-[10px] tracking-[0.25em]">TRY ON →</span></Link>
+      </div>
+    </section>
+  );
+}
+
 function Campaign() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -233,6 +246,7 @@ export default function Home() {
       <Collections />
       <Accessories />
       <Configurator />
+      <FittingRoom />
       <Campaign />
       <Runway />
       <section className="py-24 md:py-40"><div className="wrap mb-12"><p className="eyebrow">Lookbook</p><h2 className="display mt-3 text-5xl md:text-8xl"><Lines lines={["Shop the look"]} /></h2></div><Lookbook /></section>

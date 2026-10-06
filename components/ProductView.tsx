@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Shot, { type View } from "./Shot";
@@ -75,6 +76,7 @@ export default function ProductView({ p }: { p: Product }) {
             <WishButton slug={p.slug} className="!h-14 !w-14 !rounded-none border border-white/20" />
           </div>
           <button onClick={() => { if (addToCart()) router.push("/checkout"); }} className="btn btn-ghost mt-3 w-full">Buy now</button>
+          <Link href={`/try-on?item=${p.slug}&color=${ci}`} className="btn mt-3 w-full gap-2 border-white/20 text-fog hover:border-bone hover:text-bone"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4"><circle cx="12" cy="6" r="3" /><path d="M5 21v-5a7 7 0 0 1 14 0v5" /></svg>Try it on a model</Link>
 
           <div className="mt-10 border-t border-white/10">
             {details.map(([k, v]) => (

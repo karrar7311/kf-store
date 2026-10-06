@@ -105,21 +105,21 @@ function torso(keys: number[][], o: LoftOpt = {}) {
 const rzAt = (keys: number[][], y: number) => { const p = prof(keys, 120); let best = p[0]; for (const q of p) if (Math.abs(q.x - y) < Math.abs(best.x - y)) best = q; return best; };
 
 /** Sleeve / leg loft along a path [x,y,z,rx,rz?]. */
-function limb(pts: number[][], o: LoftOpt = {}) {
+export function limb(pts: number[][], o: LoftOpt = {}) {
   const c = new THREE.CatmullRomCurve3(pts.map((k) => new V(k[0], k[1], k[2])), false, "catmullrom", 0.5);
   const n = 36, centers = c.getPoints(n);
   const r = new THREE.CatmullRomCurve3(pts.map((k, i) => new V(i / (pts.length - 1), k[3], k[4] ?? k[3] * 0.92)), false, "catmullrom", 0.5).getPoints(n);
   return loft(centers, r.map((q) => q.y), r.map((q) => q.z), { seg: 40, ...o });
 }
-const mirror = (g: THREE.BufferGeometry) => { const m = g.clone(); m.scale(-1, 1, 1); flip(m); return m; };
+export const mirror = (g: THREE.BufferGeometry) => { const m = g.clone(); m.scale(-1, 1, 1); flip(m); return m; };
 
 /* ------------------------------------------------------------------ */
 /* Component                                                           */
 /* ------------------------------------------------------------------ */
-interface P { garment: Garment; color: string; material: Material; stitching?: boolean }
+interface P { garment: Garment; color: string; material: Material; stitching?: boolean; under?: boolean }
 type Extra = { kind: string; pos?: number[]; size?: number[] };
 
-export default function Apparel({ garment, color, material, stitching = true }: P) {
+export default function Apparel({ garment, color, material, stitching = true, under = false }: P) {
   const spec = MATERIALS[material];
   const col = useMemo(() => new THREE.Color(color), [color]);
   const dark = useMemo(() => col.clone().multiplyScalar(0.8), [col]);
@@ -179,10 +179,10 @@ export default function Apparel({ garment, color, material, stitching = true }: 
       add(leg(1)); add(leg(-1));
       if (!cargo) for (const s of [-1, 1]) add(limb([[s * .31, -1.46, .02, .19, .19], [s * .31, -1.58, .02, .185, .185], [s * .31, -1.72, .02, .18, .18]], { fold: 0.004, cap: "end" }), "r");
       if (cargo) extras.push({ kind: "cargo" });
-      extras.push({ kind: "drawcord" });
+      if (!under) extras.push({ kind: "drawcord" });
     }
     return { L, T, extras };
-  }, [garment, material, S]);
+  }, [garment, material, S, under]);
 
   const lines = useMemo(() => {
     const out: THREE.Vector3[][] = [];

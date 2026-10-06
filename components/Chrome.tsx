@@ -81,7 +81,7 @@ export function Cursor() {
 }
 
 /* ---------- Nav ---------- */
-const LINKS = [["SHOP", "/shop"], ["MEN", "/shop?gender=men"], ["WOMEN", "/shop?gender=women"], ["COLLECTIONS", "/#collections"], ["ABOUT", "/about"]] as const;
+const LINKS = [["SHOP", "/shop"], ["MEN", "/shop?gender=men"], ["WOMEN", "/shop?gender=women"], ["COLLECTIONS", "/#collections"], ["TRY ON", "/try-on"], ["ABOUT", "/about"]] as const;
 
 export function Nav() {
   const path = usePathname();
@@ -228,7 +228,7 @@ export function SearchOverlay() {
 export function Footer() {
   const path = usePathname();
   const [email, setEmail] = useState(""); const [sent, setSent] = useState(false);
-  if (path.startsWith("/admin") || path.startsWith("/checkout") || path.startsWith("/studio")) return null;
+  if (path.startsWith("/admin") || path.startsWith("/checkout") || path.startsWith("/studio") || path.startsWith("/try-on")) return null;
   const col = (t: string, items: [string, string][]) => (
     <div><h3 className="eyebrow mb-5 !text-bone">{t}</h3><ul className="space-y-3 text-sm text-fog">{items.map(([l, h]) => <li key={l}><Link href={h} className="transition-colors hover:text-bone">{l}</Link></li>)}</ul></div>
   );
@@ -264,7 +264,7 @@ export function MobileTabBar() {
   const { cart, wishlist, setCartOpen, setSearchOpen } = useStore();
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
-  if (["/admin", "/studio", "/checkout", "/product"].some((p) => path.startsWith(p))) return null;
+  if (["/admin", "/studio", "/checkout", "/product", "/try-on"].some((p) => path.startsWith(p))) return null;
   const count = hydrated ? cart.reduce((a, c) => a + c.qty, 0) : 0;
   const wish = hydrated ? wishlist.length : 0;
   const Item = ({ label, d, active, badge, ...rest }: { label: string; d: string; active?: boolean; badge?: number } & ({ href: string } | { onClick: () => void })) => {

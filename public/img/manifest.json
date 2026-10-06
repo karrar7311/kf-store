@@ -294,6 +294,39 @@
    "77787e": "beanie-77787e-model.jpg",
    "e0dbd0": "beanie-e0dbd0-model.jpg",
    "4b1620": "beanie-4b1620-model.jpg"
+  },
+  "back": {
+   "141416": "beanie-141416-back.jpg",
+   "77787e": "beanie-77787e-back.jpg",
+   "e0dbd0": "beanie-e0dbd0-back.jpg",
+   "4b1620": "beanie-4b1620-back.jpg"
+  },
+  "side": {
+   "141416": "beanie-141416-side.jpg",
+   "77787e": "beanie-77787e-side.jpg",
+   "e0dbd0": "beanie-e0dbd0-side.jpg",
+   "4b1620": "beanie-4b1620-side.jpg"
+  },
+  "detail": {
+   "141416": "beanie-141416-detail.jpg",
+   "77787e": "beanie-77787e-detail.jpg",
+   "e0dbd0": "beanie-e0dbd0-detail.jpg",
+   "4b1620": "beanie-4b1620-detail.jpg"
+  },
+  "fabric": {
+   "141416": "beanie-141416-fabric.jpg",
+   "77787e": "beanie-77787e-fabric.jpg",
+   "e0dbd0": "beanie-e0dbd0-fabric.jpg",
+   "4b1620": "beanie-4b1620-fabric.jpg"
+  },
+  "lifestyle": {
+   "141416": "beanie-141416-lifestyle.jpg",
+   "77787e": "beanie-77787e-lifestyle.jpg",
+   "e0dbd0": "beanie-e0dbd0-lifestyle.jpg",
+   "4b1620": "beanie-4b1620-lifestyle.jpg"
+  },
+  "wide": {
+   "141416": "beanie-141416-wide.jpg"
   }
  },
  "tote": {
@@ -304,6 +337,29 @@
   "model": {
    "e3ded3": "tote-e3ded3-model.jpg",
    "17171a": "tote-17171a-model.jpg"
+  },
+  "back": {
+   "e3ded3": "tote-e3ded3-back.jpg",
+   "17171a": "tote-17171a-back.jpg"
+  },
+  "side": {
+   "e3ded3": "tote-e3ded3-side.jpg",
+   "17171a": "tote-17171a-side.jpg"
+  },
+  "detail": {
+   "e3ded3": "tote-e3ded3-detail.jpg",
+   "17171a": "tote-17171a-detail.jpg"
+  },
+  "fabric": {
+   "e3ded3": "tote-e3ded3-fabric.jpg",
+   "17171a": "tote-17171a-fabric.jpg"
+  },
+  "lifestyle": {
+   "e3ded3": "tote-e3ded3-lifestyle.jpg",
+   "17171a": "tote-17171a-lifestyle.jpg"
+  },
+  "wide": {
+   "e3ded3": "tote-e3ded3-wide.jpg"
   }
  },
  "sunglasses": {
@@ -314,6 +370,29 @@
   "model": {
    "0f0f11": "sunglasses-0f0f11-model.jpg",
    "5c3a22": "sunglasses-5c3a22-model.jpg"
+  },
+  "back": {
+   "0f0f11": "sunglasses-0f0f11-back.jpg",
+   "5c3a22": "sunglasses-5c3a22-back.jpg"
+  },
+  "side": {
+   "0f0f11": "sunglasses-0f0f11-side.jpg",
+   "5c3a22": "sunglasses-5c3a22-side.jpg"
+  },
+  "detail": {
+   "0f0f11": "sunglasses-0f0f11-detail.jpg",
+   "5c3a22": "sunglasses-5c3a22-detail.jpg"
+  },
+  "fabric": {
+   "0f0f11": "sunglasses-0f0f11-fabric.jpg",
+   "5c3a22": "sunglasses-5c3a22-fabric.jpg"
+  },
+  "lifestyle": {
+   "0f0f11": "sunglasses-0f0f11-lifestyle.jpg",
+   "5c3a22": "sunglasses-5c3a22-lifestyle.jpg"
+  },
+  "wide": {
+   "0f0f11": "sunglasses-0f0f11-wide.jpg"
   }
  },
  "belt": {
@@ -324,6 +403,29 @@
   "model": {
    "111113": "belt-111113-model.jpg",
    "4a1822": "belt-4a1822-model.jpg"
+  },
+  "back": {
+   "111113": "belt-111113-back.jpg",
+   "4a1822": "belt-4a1822-back.jpg"
+  },
+  "side": {
+   "111113": "belt-111113-side.jpg",
+   "4a1822": "belt-4a1822-side.jpg"
+  },
+  "detail": {
+   "111113": "belt-111113-detail.jpg",
+   "4a1822": "belt-4a1822-detail.jpg"
+  },
+  "fabric": {
+   "111113": "belt-111113-fabric.jpg",
+   "4a1822": "belt-4a1822-fabric.jpg"
+  },
+  "lifestyle": {
+   "111113": "belt-111113-lifestyle.jpg",
+   "4a1822": "belt-4a1822-lifestyle.jpg"
+  },
+  "wide": {
+   "111113": "belt-111113-wide.jpg"
   }
  },
  "scarf": {
@@ -336,6 +438,34 @@
    "34353a": "scarf-34353a-model.jpg",
    "a68e6a": "scarf-a68e6a-model.jpg",
    "4b1620": "scarf-4b1620-model.jpg"
+  },
+  "back": {
+   "34353a": "scarf-34353a-back.jpg",
+   "a68e6a": "scarf-a68e6a-back.jpg",
+   "4b1620": "scarf-4b1620-back.jpg"
+  },
+  "side": {
+   "34353a": "scarf-34353a-side.jpg",
+   "a68e6a": "scarf-a68e6a-side.jpg",
+   "4b1620": "scarf-4b1620-side.jpg"
+  },
+  "detail": {
+   "34353a": "scarf-34353a-detail.jpg",
+   "a68e6a": "scarf-a68e6a-detail.jpg",
+   "4b1620": "scarf-4b1620-detail.jpg"
+  },
+  "fabric": {
+   "34353a": "scarf-34353a-fabric.jpg",
+   "a68e6a": "scarf-a68e6a-fabric.jpg",
+   "4b1620": "scarf-4b1620-fabric.jpg"
+  },
+  "lifestyle": {
+   "34353a": "scarf-34353a-lifestyle.jpg",
+   "a68e6a": "scarf-a68e6a-lifestyle.jpg",
+   "4b1620": "scarf-4b1620-lifestyle.jpg"
+  },
+  "wide": {
+   "34353a": "scarf-34353a-wide.jpg"
   }
  }
 }
