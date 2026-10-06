@@ -1,0 +1,10 @@
+import puppeteer from "puppeteer-core";
+const b = await puppeteer.launch({ executablePath: "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe", headless: "new", args: ["--use-gl=angle","--use-angle=swiftshader","--enable-unsafe-swiftshader","--ignore-gpu-blocklist","--no-sandbox"] });
+const p = await b.newPage(); await p.setViewport({ width: 900, height: 1125 });
+p.on("console", (m) => console.log("console:", m.type(), m.text().slice(0, 300)));
+p.on("pageerror", (e) => console.log("pageerror:", e.message.slice(0, 400)));
+await p.goto("http://localhost:3100/studio?garment=hoodie&color=16161a&material=fleece&view=front", { waitUntil: "domcontentloaded" });
+await new Promise((r) => setTimeout(r, 25000));
+console.log("ready:", await p.evaluate(() => window.__ready), "canvas:", await p.evaluate(() => !!document.querySelector("canvas")));
+await p.screenshot({ path: "dbg.jpg", type: "jpeg" });
+await b.close();

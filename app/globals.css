@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html { background: #0a0a0b; scroll-behavior: auto; }
+body { background: #0a0a0b; color: #efece6; font-family: var(--font-sans), system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+::selection { background: #efece6; color: #0a0a0b; }
+* { -webkit-tap-highlight-color: transparent; }
+
+@layer components {
+  .eyebrow { @apply text-[11px] uppercase tracking-[0.28em] text-fog; }
+  .display { @apply font-serif font-normal leading-[0.95] tracking-tight; }
+  .btn { @apply relative inline-flex items-center justify-center gap-3 border border-bone/70 px-8 py-4 text-[11px] uppercase tracking-[0.26em] transition-colors duration-500; }
+  .btn-solid { @apply bg-bone text-ink border-bone hover:bg-transparent hover:text-bone; }
+  .btn-ghost { @apply bg-transparent text-bone hover:bg-bone hover:text-ink; }
+  .glass { @apply border border-white/10 bg-white/[0.04] backdrop-blur-xl; }
+  .wrap { @apply mx-auto w-full max-w-[1600px] px-5 md:px-10; }
+  .field { @apply w-full border border-white/15 bg-transparent px-4 py-4 text-sm outline-none transition-colors placeholder:text-fog/70 focus:border-bone; }
+}
+
+.mask-line { overflow: hidden; display: block; }
+.grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+
+@media (hover: hover) and (pointer: fine) { body.has-cursor, body.has-cursor a, body.has-cursor button { cursor: none; } }
+.no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+.metal { background: linear-gradient(120deg, #7d8087 0%, #f2f3f5 28%, #9a9da4 48%, #fff 62%, #80838a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee { animation: marquee 40s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
+
+/* loader never traps the page, even if scripts are slow */
+@keyframes kf-loader-out { to { opacity: 0; visibility: hidden; } }
+.kf-loader { animation: kf-loader-out .6s ease 5s forwards; }

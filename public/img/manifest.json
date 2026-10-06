@@ -1,0 +1,285 @@
+{
+ "hoodie": {
+  "front": {
+   "16161a": "hoodie-16161a-front.jpg",
+   "e4dfd5": "hoodie-e4dfd5-front.jpg",
+   "6f7076": "hoodie-6f7076-front.jpg",
+   "4b1620": "hoodie-4b1620-front.jpg"
+  },
+  "back": {
+   "16161a": "hoodie-16161a-back.jpg",
+   "e4dfd5": "hoodie-e4dfd5-back.jpg",
+   "6f7076": "hoodie-6f7076-back.jpg",
+   "4b1620": "hoodie-4b1620-back.jpg"
+  },
+  "side": {
+   "16161a": "hoodie-16161a-side.jpg",
+   "e4dfd5": "hoodie-e4dfd5-side.jpg",
+   "6f7076": "hoodie-6f7076-side.jpg",
+   "4b1620": "hoodie-4b1620-side.jpg"
+  },
+  "detail": {
+   "16161a": "hoodie-16161a-detail.jpg",
+   "e4dfd5": "hoodie-e4dfd5-detail.jpg",
+   "6f7076": "hoodie-6f7076-detail.jpg",
+   "4b1620": "hoodie-4b1620-detail.jpg"
+  },
+  "model": {
+   "16161a": "hoodie-16161a-model.jpg",
+   "e4dfd5": "hoodie-e4dfd5-model.jpg",
+   "6f7076": "hoodie-6f7076-model.jpg",
+   "4b1620": "hoodie-4b1620-model.jpg"
+  },
+  "fabric": {
+   "16161a": "hoodie-16161a-fabric.jpg",
+   "e4dfd5": "hoodie-e4dfd5-fabric.jpg",
+   "6f7076": "hoodie-6f7076-fabric.jpg",
+   "4b1620": "hoodie-4b1620-fabric.jpg"
+  },
+  "lifestyle": {
+   "16161a": "hoodie-16161a-lifestyle.jpg",
+   "e4dfd5": "hoodie-e4dfd5-lifestyle.jpg",
+   "6f7076": "hoodie-6f7076-lifestyle.jpg",
+   "4b1620": "hoodie-4b1620-lifestyle.jpg"
+  },
+  "wide": {
+   "16161a": "hoodie-16161a-wide.jpg"
+  }
+ },
+ "tee": {
+  "front": {
+   "1b1b1e": "tee-1b1b1e-front.jpg",
+   "ece8df": "tee-ece8df-front.jpg",
+   "a8a59d": "tee-a8a59d-front.jpg"
+  },
+  "back": {
+   "1b1b1e": "tee-1b1b1e-back.jpg",
+   "ece8df": "tee-ece8df-back.jpg",
+   "a8a59d": "tee-a8a59d-back.jpg"
+  },
+  "side": {
+   "1b1b1e": "tee-1b1b1e-side.jpg",
+   "ece8df": "tee-ece8df-side.jpg",
+   "a8a59d": "tee-a8a59d-side.jpg"
+  },
+  "detail": {
+   "1b1b1e": "tee-1b1b1e-detail.jpg",
+   "ece8df": "tee-ece8df-detail.jpg",
+   "a8a59d": "tee-a8a59d-detail.jpg"
+  },
+  "model": {
+   "1b1b1e": "tee-1b1b1e-model.jpg",
+   "ece8df": "tee-ece8df-model.jpg",
+   "a8a59d": "tee-a8a59d-model.jpg"
+  },
+  "fabric": {
+   "1b1b1e": "tee-1b1b1e-fabric.jpg",
+   "ece8df": "tee-ece8df-fabric.jpg",
+   "a8a59d": "tee-a8a59d-fabric.jpg"
+  },
+  "lifestyle": {
+   "1b1b1e": "tee-1b1b1e-lifestyle.jpg",
+   "ece8df": "tee-ece8df-lifestyle.jpg",
+   "a8a59d": "tee-a8a59d-lifestyle.jpg"
+  },
+  "wide": {
+   "1b1b1e": "tee-1b1b1e-wide.jpg"
+  }
+ },
+ "jacket": {
+  "front": {
+   "1c1d21": "jacket-1c1d21-front.jpg",
+   "a9adb4": "jacket-a9adb4-front.jpg",
+   "1f2a44": "jacket-1f2a44-front.jpg",
+   "25262b": "jacket-25262b-front.jpg",
+   "2c2d31": "jacket-2c2d31-front.jpg",
+   "a38d6d": "jacket-a38d6d-front.jpg"
+  },
+  "back": {
+   "1c1d21": "jacket-1c1d21-back.jpg",
+   "a9adb4": "jacket-a9adb4-back.jpg",
+   "1f2a44": "jacket-1f2a44-back.jpg",
+   "25262b": "jacket-25262b-back.jpg",
+   "2c2d31": "jacket-2c2d31-back.jpg",
+   "a38d6d": "jacket-a38d6d-back.jpg"
+  },
+  "side": {
+   "1c1d21": "jacket-1c1d21-side.jpg",
+   "a9adb4": "jacket-a9adb4-side.jpg",
+   "1f2a44": "jacket-1f2a44-side.jpg",
+   "25262b": "jacket-25262b-side.jpg",
+   "2c2d31": "jacket-2c2d31-side.jpg",
+   "a38d6d": "jacket-a38d6d-side.jpg"
+  },
+  "detail": {
+   "1c1d21": "jacket-1c1d21-detail.jpg",
+   "a9adb4": "jacket-a9adb4-detail.jpg",
+   "1f2a44": "jacket-1f2a44-detail.jpg",
+   "25262b": "jacket-25262b-detail.jpg",
+   "2c2d31": "jacket-2c2d31-detail.jpg",
+   "a38d6d": "jacket-a38d6d-detail.jpg"
+  },
+  "model": {
+   "1c1d21": "jacket-1c1d21-model.jpg",
+   "a9adb4": "jacket-a9adb4-model.jpg",
+   "1f2a44": "jacket-1f2a44-model.jpg",
+   "25262b": "jacket-25262b-model.jpg",
+   "2c2d31": "jacket-2c2d31-model.jpg",
+   "a38d6d": "jacket-a38d6d-model.jpg"
+  },
+  "fabric": {
+   "1c1d21": "jacket-1c1d21-fabric.jpg",
+   "a9adb4": "jacket-a9adb4-fabric.jpg",
+   "1f2a44": "jacket-1f2a44-fabric.jpg",
+   "25262b": "jacket-25262b-fabric.jpg",
+   "2c2d31": "jacket-2c2d31-fabric.jpg",
+   "a38d6d": "jacket-a38d6d-fabric.jpg"
+  },
+  "lifestyle": {
+   "1c1d21": "jacket-1c1d21-lifestyle.jpg",
+   "a9adb4": "jacket-a9adb4-lifestyle.jpg",
+   "1f2a44": "jacket-1f2a44-lifestyle.jpg",
+   "25262b": "jacket-25262b-lifestyle.jpg",
+   "2c2d31": "jacket-2c2d31-lifestyle.jpg",
+   "a38d6d": "jacket-a38d6d-lifestyle.jpg"
+  },
+  "wide": {
+   "1c1d21": "jacket-1c1d21-wide.jpg",
+   "a9adb4": "jacket-a9adb4-wide.jpg"
+  }
+ },
+ "pants": {
+  "front": {
+   "141416": "pants-141416-front.jpg",
+   "3a3c40": "pants-3a3c40-front.jpg",
+   "b3a791": "pants-b3a791-front.jpg",
+   "17171a": "pants-17171a-front.jpg",
+   "8b8c91": "pants-8b8c91-front.jpg",
+   "e1dcd1": "pants-e1dcd1-front.jpg"
+  },
+  "back": {
+   "141416": "pants-141416-back.jpg",
+   "3a3c40": "pants-3a3c40-back.jpg",
+   "b3a791": "pants-b3a791-back.jpg",
+   "17171a": "pants-17171a-back.jpg",
+   "8b8c91": "pants-8b8c91-back.jpg",
+   "e1dcd1": "pants-e1dcd1-back.jpg"
+  },
+  "side": {
+   "141416": "pants-141416-side.jpg",
+   "3a3c40": "pants-3a3c40-side.jpg",
+   "b3a791": "pants-b3a791-side.jpg",
+   "17171a": "pants-17171a-side.jpg",
+   "8b8c91": "pants-8b8c91-side.jpg",
+   "e1dcd1": "pants-e1dcd1-side.jpg"
+  },
+  "detail": {
+   "141416": "pants-141416-detail.jpg",
+   "3a3c40": "pants-3a3c40-detail.jpg",
+   "b3a791": "pants-b3a791-detail.jpg",
+   "17171a": "pants-17171a-detail.jpg",
+   "8b8c91": "pants-8b8c91-detail.jpg",
+   "e1dcd1": "pants-e1dcd1-detail.jpg"
+  },
+  "model": {
+   "141416": "pants-141416-model.jpg",
+   "3a3c40": "pants-3a3c40-model.jpg",
+   "b3a791": "pants-b3a791-model.jpg",
+   "17171a": "pants-17171a-model.jpg",
+   "8b8c91": "pants-8b8c91-model.jpg",
+   "e1dcd1": "pants-e1dcd1-model.jpg"
+  },
+  "fabric": {
+   "141416": "pants-141416-fabric.jpg",
+   "3a3c40": "pants-3a3c40-fabric.jpg",
+   "b3a791": "pants-b3a791-fabric.jpg",
+   "17171a": "pants-17171a-fabric.jpg",
+   "8b8c91": "pants-8b8c91-fabric.jpg",
+   "e1dcd1": "pants-e1dcd1-fabric.jpg"
+  },
+  "lifestyle": {
+   "141416": "pants-141416-lifestyle.jpg",
+   "3a3c40": "pants-3a3c40-lifestyle.jpg",
+   "b3a791": "pants-b3a791-lifestyle.jpg",
+   "17171a": "pants-17171a-lifestyle.jpg",
+   "8b8c91": "pants-8b8c91-lifestyle.jpg",
+   "e1dcd1": "pants-e1dcd1-lifestyle.jpg"
+  },
+  "wide": {
+   "3a3c40": "pants-3a3c40-wide.jpg"
+  }
+ },
+ "bomber": {
+  "front": {
+   "0e0e10": "bomber-0e0e10-front.jpg",
+   "4a1822": "bomber-4a1822-front.jpg"
+  },
+  "back": {
+   "0e0e10": "bomber-0e0e10-back.jpg",
+   "4a1822": "bomber-4a1822-back.jpg"
+  },
+  "side": {
+   "0e0e10": "bomber-0e0e10-side.jpg",
+   "4a1822": "bomber-4a1822-side.jpg"
+  },
+  "detail": {
+   "0e0e10": "bomber-0e0e10-detail.jpg",
+   "4a1822": "bomber-4a1822-detail.jpg"
+  },
+  "model": {
+   "0e0e10": "bomber-0e0e10-model.jpg",
+   "4a1822": "bomber-4a1822-model.jpg"
+  },
+  "fabric": {
+   "0e0e10": "bomber-0e0e10-fabric.jpg",
+   "4a1822": "bomber-4a1822-fabric.jpg"
+  },
+  "lifestyle": {
+   "0e0e10": "bomber-0e0e10-lifestyle.jpg",
+   "4a1822": "bomber-4a1822-lifestyle.jpg"
+  },
+  "wide": {
+   "0e0e10": "bomber-0e0e10-wide.jpg"
+  }
+ },
+ "cap": {
+  "front": {
+   "131315": "cap-131315-front.jpg",
+   "3b3c40": "cap-3b3c40-front.jpg",
+   "e2ddd2": "cap-e2ddd2-front.jpg"
+  },
+  "back": {
+   "131315": "cap-131315-back.jpg",
+   "3b3c40": "cap-3b3c40-back.jpg",
+   "e2ddd2": "cap-e2ddd2-back.jpg"
+  },
+  "side": {
+   "131315": "cap-131315-side.jpg",
+   "3b3c40": "cap-3b3c40-side.jpg",
+   "e2ddd2": "cap-e2ddd2-side.jpg"
+  },
+  "detail": {
+   "131315": "cap-131315-detail.jpg",
+   "3b3c40": "cap-3b3c40-detail.jpg",
+   "e2ddd2": "cap-e2ddd2-detail.jpg"
+  },
+  "model": {
+   "131315": "cap-131315-model.jpg",
+   "3b3c40": "cap-3b3c40-model.jpg",
+   "e2ddd2": "cap-e2ddd2-model.jpg"
+  },
+  "fabric": {
+   "131315": "cap-131315-fabric.jpg",
+   "3b3c40": "cap-3b3c40-fabric.jpg",
+   "e2ddd2": "cap-e2ddd2-fabric.jpg"
+  },
+  "lifestyle": {
+   "131315": "cap-131315-lifestyle.jpg",
+   "3b3c40": "cap-3b3c40-lifestyle.jpg",
+   "e2ddd2": "cap-e2ddd2-lifestyle.jpg"
+  },
+  "wide": {
+   "131315": "cap-131315-wide.jpg"
+  }
+ }
+}
