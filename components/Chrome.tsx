@@ -30,7 +30,7 @@ export function Loader() {
         <motion.div className="kf-loader fixed inset-0 z-[100] flex flex-col items-center justify-center bg-ink" exit={{ clipPath: "inset(0 0 100% 0)" }} transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }} initial={{ clipPath: "inset(0 0 0% 0)" }}>
           <Logo variant="silver" className="text-7xl md:text-8xl" />
           <div className="mt-10 h-px w-40 overflow-hidden bg-white/10"><div className="h-full bg-bone" style={{ width: `${pct}%` }} /></div>
-          <p className="mt-4 text-[11px] tracking-[0.3em] text-fog tabular-nums">01 — {String(pct).padStart(3, "0")}%</p>
+          <p className="mt-4 text-[11px] tracking-[0.3em] text-fog tabular-nums">{String(pct).padStart(3, "0")}%</p>
         </motion.div>
       )}
     </AnimatePresence>

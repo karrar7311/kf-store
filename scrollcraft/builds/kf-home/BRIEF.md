@@ -30,3 +30,36 @@ The 0–12% of the Assembly (parts drifting in) and the final held beat after co
 
 ## Reduced motion
 No pinning, the hoodie is shown fully assembled with all six callouts reachable.
+
+---
+
+# Pass 2: more depth, more motion (2026-10-16)
+
+**Owner's direction, verbatim:** "edit more the website and make it more 3d and more motions". Everything else below is authored under that direction. The interview questions were asked again and not answered, so the decisions are authored, not quoted. Structure, shop, cart, fitting room and deploy stay unchanged.
+
+## What changes, act by act
+
+| Act | Before | After | Device |
+|---|---|---|---|
+| Hero | One plane of wordmark plus 3D hoodie, text fades | Pinned for 1.7 screens, with four planes: a far light cone (slowest), the wordmark (mid, counter-parallax), the 3D hoodie (subject, turns to show its back), and near bokeh dust in front of the hoodie (fastest). Second beat: "Cut to hold its shape." The stage exits into a framed card. | pin + parallax |
+| Manifesto | Static masked lines | Each word swings up from a 3D hinge (rotateX) and brightens, scrubbed by scroll | kinetic scrub |
+| Assembly (peak) | Unchanged mechanics | Banned chrome removed: the "01 / 06" counter and "KEEP SCROLLING" | pin (3D) |
+| Editorial | Flat reveals | The Night Shell plate lifts off the table (rotateX 14deg to 0). The drag strip becomes a pinned 3D coverflow driven by scroll. | tilt + pan |
+| Collections | Hover zoom | Pointer-tilt cards with a glare layer and a label that floats in Z | pointer 3D |
+| Configurator | Static photo | A live, slowly turning 3D hoodie, mounted only when near the viewport | live 3D |
+| Campaign | Cross-fading frames | Frames stand on a 3D ring that turns with scroll, with the title in front | orbit |
+| Runway | Unchanged | Banned chrome removed: "SCROLL TO WALK" and the "LOOK 01 / 06" counter | scrub (3D) |
+
+## Feeling curve (pass 2)
+- Hero: **awe at depth**. Light, wordmark, hoodie and dust separate as you move.
+- Manifesto: **resolve**. Words stand up one by one under your hand.
+- Assembly: **wonder** (peak, still the largest span at 520vh).
+- Editorial: **calm confidence**. Plates settle flat, then the coverflow gives you **choice**.
+- Collections: **play**. Cards respond to the hand.
+- Campaign: **momentum**. The ring turns like a show.
+- Runway: **arrival**.
+
+The peak is unchanged: "I scrolled and the hoodie built itself." The act before it (the manifesto) has no media, so it stays quieter than the peak.
+
+## Reduced motion
+All new scroll and pointer transforms are disabled. The hero is not pinned, the coverflow is a plain scrollable row, and the ring shows a static frame.

@@ -22,14 +22,14 @@ function pick(garment: Garment, view: View, hex: string) {
   return best;
 }
 
-export default function Shot({ garment, color, view = "front", tone, label, className = "", priority = false, sizes = "(max-width: 768px) 50vw, 28vw" }: {
-  garment: Garment; color: string; view?: View; tone?: string; label?: string; className?: string; priority?: boolean; sizes?: string;
+export default function Shot({ garment, color, view = "front", tone, label, className = "", priority = false, eager = false, sizes = "(max-width: 768px) 50vw, 28vw" }: {
+  garment: Garment; color: string; view?: View; tone?: string; label?: string; className?: string; priority?: boolean; eager?: boolean; sizes?: string;
 }) {
   const file = pick(garment, view, color);
   if (!file) return <SvgShot garment={garment} color={color} view={view} tone={tone} label={label} className={className} />;
   return (
     <span className={`relative block h-full w-full ${className}`}>
-      <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/img/${file}`} alt={label ?? `K&F ${garment}, ${view} view`} fill sizes={sizes} priority={priority} quality={78} draggable={false} className="select-none object-cover" />
+      <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/img/${file}`} alt={label ?? `K&F ${garment}, ${view} view`} fill sizes={sizes} priority={priority} loading={priority ? undefined : eager ? "eager" : "lazy"} quality={78} draggable={false} className="select-none object-cover" />
     </span>
   );
 }

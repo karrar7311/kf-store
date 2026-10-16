@@ -30,6 +30,17 @@ body { background: #0a0a0b; color: #efece6; font-family: var(--font-sans), syste
 .marquee { animation: marquee 40s linear infinite; }
 @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
 
+/* 3D tilt cards */
+.kf-tilt { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .5s cubic-bezier(.16,1,.3,1); will-change: transform; }
+.kf-glare { opacity: calc(var(--glare, 0) * .55); transition: opacity .5s ease; mix-blend-mode: soft-light;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255,255,255,.55), transparent 55%); }
+.kf-lift { transform: translateZ(60px); }
+
+/* manifesto: words hinge up in 3D, driven by --w (0..1) per word */
+.kf-word { display: inline-block; transform-origin: 50% 100%; transform: perspective(700px) rotateX(calc((1 - var(--w, 1)) * 82deg)) translateY(calc((1 - var(--w, 1)) * .25em)); opacity: calc(.12 + var(--w, 1) * .88); will-change: transform, opacity; }
+
+@media (prefers-reduced-motion: reduce) { .kf-tilt { transform: none; } .kf-word { transform: none; opacity: 1; } }
+
 /* loader never traps the page, even if scripts are slow */
 @keyframes kf-loader-out { to { opacity: 0; visibility: hidden; } }
 .kf-loader { animation: kf-loader-out .6s ease 5s forwards; }

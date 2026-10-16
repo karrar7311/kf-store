@@ -10,14 +10,18 @@ export function Reveal({ children, delay = 0, className = "", y = 40 }: { childr
   );
 }
 
-/** Line-masked headline reveal: pass lines as array. */
+/**
+ * Line-masked headline reveal: pass lines as array.
+ * The in-view trigger sits on the mask, not the hidden line: a line pushed fully below its
+ * own overflow mask never intersects the viewport, so it would never reveal.
+ */
 export function Lines({ lines, className = "", delay = 0 }: { lines: string[]; className?: string; delay?: number }) {
   return (
     <span className={className}>
       {lines.map((l, i) => (
-        <span key={i} className="mask-line">
-          <motion.span className="block" initial={{ y: "105%" }} whileInView={{ y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 1.1, delay: delay + i * 0.09, ease: [0.16, 1, 0.3, 1] }}>{l}</motion.span>
-        </span>
+        <motion.span key={i} className="mask-line" initial="hidden" whileInView="shown" viewport={{ once: true, margin: "-10%" }}>
+          <motion.span className="block" variants={{ hidden: { y: "105%" }, shown: { y: 0 } }} transition={{ duration: 1.1, delay: delay + i * 0.09, ease: [0.16, 1, 0.3, 1] }}>{l}</motion.span>
+        </motion.span>
       ))}
     </span>
   );
