@@ -1,5 +1,6 @@
 "use client";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Line, RoundedBox } from "@react-three/drei";
 import type { Garment, Material } from "@/lib/products";
@@ -116,10 +117,34 @@ export const mirror = (g: THREE.BufferGeometry) => { const m = g.clone(); m.scal
 /* ------------------------------------------------------------------ */
 /* Component                                                           */
 /* ------------------------------------------------------------------ */
-interface P { garment: Garment; color: string; material: Material; stitching?: boolean; under?: boolean }
+/* ---------- "The Assembly": parts fly in as scroll progress goes 0 -> 1 ---------- */
+type Vec = [number, number, number];
+function Fly({ off, rot = [0, 0, 0], i, progress, children }: { off: Vec; rot?: Vec; i: number; progress: React.MutableRefObject<number>; children: React.ReactNode }) {
+  const g = useRef<THREE.Group>(null);
+  useFrame(() => {
+    if (!g.current) return;
+    const t = Math.min(1, Math.max(0, progress.current * 1.9 - i * 0.08));
+    const k = Math.pow(1 - t, 3);
+    g.current.position.set(off[0] * k, off[1] * k, off[2] * k);
+    g.current.rotation.set(rot[0] * k, rot[1] * k, rot[2] * k);
+  });
+  return <group ref={g}>{children}</group>;
+}
+function Gate({ progress, min, children }: { progress: React.MutableRefObject<number>; min: number; children: React.ReactNode }) {
+  const g = useRef<THREE.Group>(null);
+  useFrame(() => { if (g.current) g.current.visible = progress.current >= min; });
+  return <group ref={g}>{children}</group>;
+}
+const HOODIE_FLY: { off: Vec; rot?: Vec }[] = [
+  { off: [0, 0, 0] }, { off: [0, -2.2, 0], rot: [0.4, 0, 0] },
+  { off: [3.0, 0.5, 0.4], rot: [0, 0.3, 0.9] }, { off: [-3.0, 0.5, 0.4], rot: [0, -0.3, -0.9] },
+  { off: [3.8, -1.0, 0.8], rot: [0, 0, 0.6] }, { off: [-3.8, -1.0, 0.8], rot: [0, 0, -0.6] },
+];
+
+interface P { garment: Garment; color: string; material: Material; stitching?: boolean; under?: boolean; assemble?: React.MutableRefObject<number> }
 type Extra = { kind: string; pos?: number[]; size?: number[] };
 
-export default function Apparel({ garment, color, material, stitching = true, under = false }: P) {
+export default function Apparel({ garment, color, material, stitching = true, under = false, assemble }: P) {
   const spec = MATERIALS[material];
   const col = useMemo(() => new THREE.Color(color), [color]);
   const dark = useMemo(() => col.clone().multiplyScalar(0.8), [col]);
@@ -233,14 +258,15 @@ export default function Apparel({ garment, color, material, stitching = true, un
   const dl = { lineWidth: 0.9, dashed: true, dashSize: 0.03, gapSize: 0.02, transparent: true, opacity: 0.5 } as const;
   return (
     <group position={[0, 0.08, 0]}>
-      {L.map((p, i) => <mesh key={i} geometry={p.g} castShadow receiveShadow material={p.m === "r" ? rib : fabric} />)}
-      {lines.map((l, i) => <Line key={i} points={l} color={stitchCol} {...dl} />)}
+      {L.map((p, i) => { const m = <mesh key={i} geometry={p.g} castShadow receiveShadow material={p.m === "r" ? rib : fabric} />; const f = HOODIE_FLY[i]; return assemble && f ? <Fly key={i} i={i} off={f.off} rot={f.rot} progress={assemble}>{m}</Fly> : m; })}
+      {assemble ? <Gate progress={assemble} min={0.93}>{lines.map((l, i) => <Line key={i} points={l} color={stitchCol} {...dl} />)}</Gate> : lines.map((l, i) => <Line key={i} points={l} color={stitchCol} {...dl} />)}
 
-      {(garment === "tee" || garment === "hoodie" || garment === "bomber") && (
-        <mesh position={[-0.3, 0.68, chestZ + 0.012]} rotation={[-0.06, 0, 0]}><planeGeometry args={[0.34, 0.17]} /><meshStandardMaterial map={logo} transparent roughness={1} polygonOffset polygonOffsetFactor={-3} /></mesh>
-      )}
+      {(garment === "tee" || garment === "hoodie" || garment === "bomber") && (() => {
+        const lg = <mesh position={[-0.3, 0.68, chestZ + 0.012]} rotation={[-0.06, 0, 0]}><planeGeometry args={[0.34, 0.17]} /><meshStandardMaterial map={logo} transparent roughness={1} polygonOffset polygonOffsetFactor={-3} /></mesh>;
+        return assemble ? <Fly i={9} off={[0, 0, 3.4]} progress={assemble}>{lg}</Fly> : lg;
+      })()}
 
-      {extras.map((e, i) => {
+      {extras.map((e, i) => { const node = (() => {
         switch (e.kind) {
           case "hood": return (
             <group key={i}>
@@ -283,6 +309,10 @@ export default function Apparel({ garment, color, material, stitching = true, un
               <mesh position={[s * 0.1, 0.74, 0.362]} material={metal}><cylinderGeometry args={[0.02, 0.02, 0.06, 12]} /></mesh></group>));
           default: return null;
         }
+      })();
+        const FLY: Record<string, { off: Vec; rot?: Vec; i: number }> = { hood: { off: [0, 2.6, -1.8], rot: [-0.7, 0, 0], i: 6 }, pocket: { off: [0, -0.4, 3.0], i: 7 }, cords: { off: [0, 1.0, 3.2], i: 8 } };
+        const f = FLY[e.kind];
+        return assemble && f ? <Fly key={i} i={f.i} off={f.off} rot={f.rot} progress={assemble}>{node}</Fly> : <group key={i}>{node}</group>;
       })}
     </group>
   );

@@ -15,6 +15,7 @@ import { Lookbook } from "./Lookbook";
 import { collections, findProduct, money, products } from "@/lib/products";
 
 const HeroScene = dynamic(() => import("./three/HeroScene"), { ssr: false });
+const AnatomyScene = dynamic(() => import("./three/AnatomyScene"), { ssr: false });
 const RunwayScene = dynamic(() => import("./three/RunwayScene"), { ssr: false });
 const RUNWAY = ["technical-jacket", "essential-heavyweight-hoodie", "studio-bomber", "premium-cargo-pants", "denim-trucker", "signature-oversized-tee"].map((s) => findProduct(s)!);
 
@@ -55,6 +56,71 @@ function Manifesto() {
     <section className="wrap py-32 md:py-48">
       <p className="eyebrow mb-8">The new standard</p>
       <h2 className="display max-w-6xl text-[11vw] md:text-[7.2vw]"><Lines lines={["Not about following", "the moment.", "About creating your own."]} /></h2>
+    </section>
+  );
+}
+
+const STAGES = [
+  ["01", "The cloth", "480gsm loopback fleece", "Organic cotton, brushed back and garment-washed until it hangs like it has been yours for years."],
+  ["02", "The sleeves", "Raglan set, ribbed cuffs", "Cut with room at the shoulder. Cuffs hold their shape with 2% elastane."],
+  ["03", "The hood", "Double-lined, holds its form", "Two layers of the same fleece, so it stands up on its own and never collapses."],
+  ["04", "The pocket", "Bar-tacked kangaroo pouch", "Reinforced at every stress point. Built for hands, phones and bad weather."],
+  ["05", "The hardware", "Brushed silver aglets", "Flat drawcord, solid metal tips, tonal threads throughout."],
+  ["06", "The mark", "Tonal K&F embroidery", "One quiet signature at the chest. The whole point is that you don't need more."],
+] as const;
+
+/** Signature move: scroll builds the garment. Pinned; 3D parts fly in and join. */
+function Assembly() {
+  const ref = useRef<HTMLElement>(null);
+  const progress = useRef(0);
+  const [stage, setStage] = useState(0);
+  const [done, setDone] = useState(false);
+  const [reduced, setReduced] = useState(false);
+  const bar = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { progress.current = 1; setReduced(true); setStage(STAGES.length - 1); setDone(true); return; }
+    const st = ScrollTrigger.create({
+      trigger: ref.current, start: "top top", end: "bottom bottom",
+      onUpdate: (s) => {
+        progress.current = Math.min(1, s.progress / 0.88);
+        setStage(Math.min(STAGES.length - 1, Math.floor(progress.current * STAGES.length * 0.999)));
+        setDone(progress.current >= 0.97);
+        if (bar.current) bar.current.style.transform = `scaleY(${progress.current})`;
+      },
+    });
+    return () => st.kill();
+  }, []);
+  const cur = STAGES[stage];
+  return (
+    <section ref={ref} className={`relative ${reduced ? "" : "h-[520vh]"}`} id="assembly" aria-label="The anatomy of a K&F hoodie">
+      <div className={`${reduced ? "relative min-h-screen" : "sticky top-0 h-[100svh]"} overflow-hidden bg-[radial-gradient(ellipse_at_60%_45%,#26262c_0%,#121214_60%,#070708_100%)]`}>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-end pr-[4vw]"><span className="display select-none text-[44vw] leading-none text-white/[0.035] md:text-[30vw]">{cur[0]}</span></div>
+        <div className="absolute inset-x-0 top-12 bottom-[38%] md:inset-0 md:left-[18%] md:top-0" data-cursor="WATCH"><InView margin="500px" className="h-full"><AnatomyScene progress={progress} /></InView></div>
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.7)_0%,transparent_45%)] max-md:bg-[linear-gradient(0deg,rgba(0,0,0,.85)_0%,transparent_55%)]" />
+
+        <div className="absolute left-5 top-24 md:left-10"><p className="eyebrow">The anatomy of a hoodie</p></div>
+        <div className="absolute bottom-24 left-5 right-5 md:bottom-auto md:left-10 md:right-auto md:top-1/2 md:w-[min(30rem,38vw)] md:-translate-y-1/2">
+          <AnimatePresence mode="wait">
+            <motion.div key={stage} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
+              <p className="text-[11px] tracking-[0.3em] text-fog">{cur[0]} / 06 — {cur[1].toUpperCase()}</p>
+              <h2 className="display mt-3 text-4xl md:text-6xl">{cur[2]}</h2>
+              <p className="mt-4 max-w-sm text-sm leading-relaxed text-fog">{cur[3]}</p>
+            </motion.div>
+          </AnimatePresence>
+          <AnimatePresence>
+            {done && (
+              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="pointer-events-auto mt-8 flex flex-wrap items-center gap-4">
+                <Magnetic><Link href="/product/essential-heavyweight-hoodie" className="btn btn-solid">Shop the hoodie · $120</Link></Magnetic>
+                <Link href="/try-on?item=essential-heavyweight-hoodie" className="text-[11px] uppercase tracking-[0.24em] text-fog underline underline-offset-8 hover:text-bone">Try it on</Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div className="absolute bottom-8 right-5 top-24 hidden w-px bg-white/10 md:block md:right-10"><span ref={bar} className="absolute inset-0 origin-top bg-bone" style={{ transform: "scaleY(0)" }} /></div>
+        <div className="absolute bottom-6 left-5 text-[10px] tracking-[0.3em] text-fog md:left-10">{done ? "ASSEMBLED" : "KEEP SCROLLING"}</div>
+      </div>
     </section>
   );
 }
@@ -242,6 +308,7 @@ export default function Home() {
     <>
       <Hero />
       <Manifesto />
+      <Assembly />
       <Editorial />
       <Collections />
       <Accessories />
