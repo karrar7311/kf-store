@@ -216,8 +216,10 @@ export default function Apparel({ garment, color, material, stitching = true, un
       both(limb([[1.09, -.96, .24, .15], [1.1, -1.12, .26, .145], [1.1, -1.26, .28, .14]], { fold: 0.004, cap: "end" }), "r");
       extras.push({ kind: "neckrib" });
     } else if (garment === "vest") {
-      T = [[1.5, .25, .21], [1.38, .26, .21], [1.28, .40, .25], [1.14, .56, .30], [.9, .64, .37], [0, .70, .40], [-.9, .70, .39], [-1.3, .68, .37]];
-      add(torso(T, { fold: S * 0.5, baffle: 0.05 }));
+      T = [[1.5, .25, .21], [1.38, .26, .21], [1.29, .34, .23], [1.16, .47, .27], [.95, .50, .31], [.6, .45, .32], [.2, .50, .34], [-.5, .60, .38], [-.9, .68, .40], [-1.3, .68, .39]];
+      add(torso(T, { fold: S * 0.5, baffle: 0.06 }));
+      // armhole trim
+      extras.push({ kind: "armholes" });
       extras.push({ kind: "zip" });
     } else if (garment === "coat") {
       T = [[1.55, .26, .21], [1.4, .28, .22], [1.28, .44, .26], [1.14, .64, .31], [.9, .70, .35], [0, .75, .38], [-1.0, .82, .39], [-2.0, .92, .40], [-2.45, .95, .39]];
@@ -233,7 +235,7 @@ export default function Apparel({ garment, color, material, stitching = true, un
         ? [[s * .33, 1.32, 0, .42, .37], [s * .38, .5, .01, .38, .34], [s * .36, -.5, .02, .31, .29], [s * .34, -1.3, .02, .26, .25], [s * .33, -1.62, .02, .24, .23]]
         : [[s * .33, 1.32, 0, .42, .37], [s * .37, .5, .01, .37, .33], [s * .34, -.5, .02, .30, .28], [s * .32, -1.3, .02, .24, .23], [s * .31, -1.5, .02, .20, .20]], { fold: S * 1.4, cap: "end" });
       if (shorts) {
-        const sl = (s: number) => limb([[s * .33, 1.32, 0, .42, .37], [s * .38, .5, .01, .40, .36], [s * .38, -.2, .02, .38, .34], [s * .37, -.62, .02, .37, .33]], { fold: S * 1.2, cap: "end" });
+        const sl = (s: number) => limb([[s * .33, 1.32, 0, .42, .37], [s * .38, .5, .01, .40, .36], [s * .38, -.2, .02, .38, .34], [s * .37, -.62, .02, .37, .33]], { fold: S * 0.45, cap: "end" });
         add(sl(1)); add(sl(-1));
       } else { add(leg(1)); add(leg(-1)); }
       if (!cargo && !shorts) for (const s of [-1, 1]) add(limb([[s * .31, -1.46, .02, .19, .19], [s * .31, -1.58, .02, .185, .185], [s * .31, -1.72, .02, .18, .18]], { fold: 0.004, cap: "end" }), "r");
@@ -330,6 +332,7 @@ export default function Apparel({ garment, color, material, stitching = true, un
           case "buttons": return (
             <group key={i}>{Array.from({ length: e.n ?? 7 }, (_, k) => { const y = 1.05 - k * (e.n ? 0.4 : 0.33); return <mesh key={k} position={[0, y, rzAt(T, y).z + 0.014]} rotation={[Math.PI / 2, 0, 0]} material={metal}><cylinderGeometry args={[0.032, 0.032, 0.02, 20]} /></mesh>; })}</group>
           );
+          case "armholes": return [-1, 1].map((s) => <mesh key={`ah${s}`} position={[s * 0.5, 0.78, 0]} rotation={[0, Math.PI / 2, 0]} scale={[1.15, 1, 1]} material={rib}><torusGeometry args={[0.3, 0.03, 12, 40]} /></mesh>);
           case "wings": return [-1, 1].map((s) => <mesh key={`w${s}`} position={[s * 0.2, 1.26, 0.2]} rotation={[0.55, 0, s * -0.6]} castShadow material={fabric}><boxGeometry args={[0.36, 0.2, 0.035]} /></mesh>);
           case "pockets": return [-1, 1].map((s) => <RoundedBox key={`p${s}`} args={[0.3, 0.035, 0.03]} radius={0.012} smoothness={3} rotation={[0, 0, s * 0.18]} position={[s * 0.33, 0.52, rzAt(T, 0.52).z + 0.008]} material={rib} />);
           case "cargo": return [-1, 1].map((s) => (

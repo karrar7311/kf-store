@@ -11,7 +11,7 @@ import type { Garment, Material } from "@/lib/products";
  * Offline render stage: /studio?garment=hoodie&color=16161a&material=fleece&view=front
  * scripts/render.mjs screenshots this page to produce the site's product photography.
  */
-const DIST: Record<Garment, number> = { hoodie: 9.2, tee: 8.2, jacket: 9.8, bomber: 8.6, pants: 10.4, cap: 7.2, beanie: 6.6, tote: 8.6, sunglasses: 8.4, belt: 8.4, scarf: 10, sweater: 9.2, shorts: 7.4, vest: 9.2, coat: 12 };
+const DIST: Record<Garment, number> = { hoodie: 9.2, tee: 8.2, jacket: 9.8, bomber: 8.6, pants: 10.4, cap: 7.2, beanie: 6.6, tote: 8.6, sunglasses: 8.4, belt: 8.4, scarf: 10, sweater: 9.2, shorts: 7.4, vest: 9.2, coat: 10.8 };
 const CENTER: Record<Garment, number> = { hoodie: -0.05, tee: 0.1, jacket: 0.05, bomber: 0.15, pants: -0.1, cap: 0.25, beanie: 0.25, tote: 0, sunglasses: 0, belt: 0, scarf: 0, sweater: -0.05, shorts: 0.45, vest: 0.1, coat: -0.5 };
 const GROUND: Partial<Record<Garment, number>> = { cap: -0.62, pants: -1.75, beanie: -0.62, tote: -0.98, sunglasses: -0.5, belt: -1.3, scarf: -1.5, shorts: -0.75, coat: -2.5 };
 /** close-up target + distance for accessories */
@@ -55,7 +55,7 @@ function Stage() {
       {view === "wide" && <div style={{ position: "absolute", left: 70, bottom: 60, fontFamily: "Inter, sans-serif", fontSize: 20, letterSpacing: ".4em", color: "rgba(255,255,255,.5)" }}>K&amp;F / THE NEW FORM / 2027</div>}
       {view === "lifestyle" && <div style={{ position: "absolute", left: -40, top: 60, fontFamily: "Georgia, serif", fontSize: 560, color: "rgba(255,255,255,.05)", letterSpacing: "-0.05em", lineHeight: 1 }}>K&amp;F</div>}
       {view === "lifestyle" && <div style={{ position: "absolute", left: 50, bottom: 60, fontFamily: "Inter, sans-serif", fontSize: 18, letterSpacing: ".4em", color: "rgba(255,255,255,.5)" }}>K&amp;F / 2027</div>}
-      <Canvas style={{ position: "absolute", inset: 0 }} gl={{ preserveDrawingBuffer: true, alpha: true, antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: lum > 0.55 ? 0.62 : 1.15 }} dpr={1} camera={{ fov: view === "detail" || view === "fabric" ? 34 : 28, near: 0.05, far: 60 }} shadows>
+      <Canvas style={{ position: "absolute", inset: 0 }} gl={{ preserveDrawingBuffer: true, alpha: true, antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: garment === "shorts" ? 0.4 : lum > 0.55 ? 0.62 : 1.15 }} dpr={1} camera={{ fov: view === "detail" || view === "fabric" ? 34 : 28, near: 0.05, far: 60 }} shadows>
         <ambientLight intensity={0.42} />
         <spotLight position={[4, 7, 6]} angle={0.5} penumbra={1} intensity={view === "model" || view === "lifestyle" ? 320 : 220} castShadow shadow-mapSize={[2048, 2048]} shadow-bias={-0.0004} />
         <spotLight position={[-6, 3, -4]} angle={0.7} penumbra={1} intensity={view === "model" ? 520 : 170} color={view === "model" ? "#ffb8c8" : "#c8d2ff"} />
