@@ -467,5 +467,158 @@
   "wide": {
    "34353a": "scarf-34353a-wide.jpg"
   }
+ },
+ "sweater": {
+  "front": {
+   "2e2f33": "sweater-2e2f33-front.jpg",
+   "cfc6b4": "sweater-cfc6b4-front.jpg",
+   "4b1620": "sweater-4b1620-front.jpg"
+  },
+  "back": {
+   "2e2f33": "sweater-2e2f33-back.jpg",
+   "cfc6b4": "sweater-cfc6b4-back.jpg",
+   "4b1620": "sweater-4b1620-back.jpg"
+  },
+  "side": {
+   "2e2f33": "sweater-2e2f33-side.jpg",
+   "cfc6b4": "sweater-cfc6b4-side.jpg",
+   "4b1620": "sweater-4b1620-side.jpg"
+  },
+  "detail": {
+   "2e2f33": "sweater-2e2f33-detail.jpg",
+   "cfc6b4": "sweater-cfc6b4-detail.jpg",
+   "4b1620": "sweater-4b1620-detail.jpg"
+  },
+  "model": {
+   "2e2f33": "sweater-2e2f33-model.jpg",
+   "cfc6b4": "sweater-cfc6b4-model.jpg",
+   "4b1620": "sweater-4b1620-model.jpg"
+  },
+  "fabric": {
+   "2e2f33": "sweater-2e2f33-fabric.jpg",
+   "cfc6b4": "sweater-cfc6b4-fabric.jpg",
+   "4b1620": "sweater-4b1620-fabric.jpg"
+  },
+  "lifestyle": {
+   "2e2f33": "sweater-2e2f33-lifestyle.jpg",
+   "cfc6b4": "sweater-cfc6b4-lifestyle.jpg",
+   "4b1620": "sweater-4b1620-lifestyle.jpg"
+  },
+  "wide": {
+   "2e2f33": "sweater-2e2f33-wide.jpg"
+  }
+ },
+ "shorts": {
+  "front": {
+   "141416": "shorts-141416-front.jpg",
+   "aaa69c": "shorts-aaa69c-front.jpg",
+   "3a3c40": "shorts-3a3c40-front.jpg"
+  },
+  "back": {
+   "141416": "shorts-141416-back.jpg",
+   "aaa69c": "shorts-aaa69c-back.jpg",
+   "3a3c40": "shorts-3a3c40-back.jpg"
+  },
+  "side": {
+   "141416": "shorts-141416-side.jpg",
+   "aaa69c": "shorts-aaa69c-side.jpg",
+   "3a3c40": "shorts-3a3c40-side.jpg"
+  },
+  "detail": {
+   "141416": "shorts-141416-detail.jpg",
+   "aaa69c": "shorts-aaa69c-detail.jpg",
+   "3a3c40": "shorts-3a3c40-detail.jpg"
+  },
+  "model": {
+   "141416": "shorts-141416-model.jpg",
+   "aaa69c": "shorts-aaa69c-model.jpg",
+   "3a3c40": "shorts-3a3c40-model.jpg"
+  },
+  "fabric": {
+   "141416": "shorts-141416-fabric.jpg",
+   "aaa69c": "shorts-aaa69c-fabric.jpg",
+   "3a3c40": "shorts-3a3c40-fabric.jpg"
+  },
+  "lifestyle": {
+   "141416": "shorts-141416-lifestyle.jpg",
+   "aaa69c": "shorts-aaa69c-lifestyle.jpg",
+   "3a3c40": "shorts-3a3c40-lifestyle.jpg"
+  },
+  "wide": {
+   "141416": "shorts-141416-wide.jpg"
+  }
+ },
+ "vest": {
+  "front": {
+   "1c1d21": "vest-1c1d21-front.jpg",
+   "a9adb4": "vest-a9adb4-front.jpg",
+   "4a1822": "vest-4a1822-front.jpg"
+  },
+  "back": {
+   "1c1d21": "vest-1c1d21-back.jpg",
+   "a9adb4": "vest-a9adb4-back.jpg",
+   "4a1822": "vest-4a1822-back.jpg"
+  },
+  "side": {
+   "1c1d21": "vest-1c1d21-side.jpg",
+   "a9adb4": "vest-a9adb4-side.jpg",
+   "4a1822": "vest-4a1822-side.jpg"
+  },
+  "detail": {
+   "1c1d21": "vest-1c1d21-detail.jpg",
+   "a9adb4": "vest-a9adb4-detail.jpg",
+   "4a1822": "vest-4a1822-detail.jpg"
+  },
+  "model": {
+   "1c1d21": "vest-1c1d21-model.jpg",
+   "a9adb4": "vest-a9adb4-model.jpg",
+   "4a1822": "vest-4a1822-model.jpg"
+  },
+  "fabric": {
+   "1c1d21": "vest-1c1d21-fabric.jpg",
+   "a9adb4": "vest-a9adb4-fabric.jpg",
+   "4a1822": "vest-4a1822-fabric.jpg"
+  },
+  "lifestyle": {
+   "1c1d21": "vest-1c1d21-lifestyle.jpg",
+   "a9adb4": "vest-a9adb4-lifestyle.jpg",
+   "4a1822": "vest-4a1822-lifestyle.jpg"
+  },
+  "wide": {
+   "1c1d21": "vest-1c1d21-wide.jpg"
+  }
+ },
+ "coat": {
+  "front": {
+   "2c2d31": "coat-2c2d31-front.jpg",
+   "a38d6d": "coat-a38d6d-front.jpg"
+  },
+  "back": {
+   "2c2d31": "coat-2c2d31-back.jpg",
+   "a38d6d": "coat-a38d6d-back.jpg"
+  },
+  "side": {
+   "2c2d31": "coat-2c2d31-side.jpg",
+   "a38d6d": "coat-a38d6d-side.jpg"
+  },
+  "detail": {
+   "2c2d31": "coat-2c2d31-detail.jpg",
+   "a38d6d": "coat-a38d6d-detail.jpg"
+  },
+  "model": {
+   "2c2d31": "coat-2c2d31-model.jpg",
+   "a38d6d": "coat-a38d6d-model.jpg"
+  },
+  "fabric": {
+   "2c2d31": "coat-2c2d31-fabric.jpg",
+   "a38d6d": "coat-a38d6d-fabric.jpg"
+  },
+  "lifestyle": {
+   "2c2d31": "coat-2c2d31-lifestyle.jpg",
+   "a38d6d": "coat-a38d6d-lifestyle.jpg"
+  },
+  "wide": {
+   "2c2d31": "coat-2c2d31-wide.jpg"
+  }
  }
 }
