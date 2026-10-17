@@ -44,3 +44,10 @@ body { background: #0a0a0b; color: #efece6; font-family: var(--font-sans), syste
 /* loader never traps the page, even if scripts are slow */
 @keyframes kf-loader-out { to { opacity: 0; visibility: hidden; } }
 .kf-loader { animation: kf-loader-out .6s ease 5s forwards; }
+
+/* colourway glow: animatable custom property set by the hero colour switch */
+@property --kf-glow { syntax: "<color>"; inherits: true; initial-value: #efece6; }
+html { transition: --kf-glow 1.2s ease; }
+.kf-cone { background: conic-gradient(from 180deg at 50% 0%, transparent 160deg, color-mix(in srgb, var(--kf-glow) 9%, transparent) 175deg, color-mix(in srgb, var(--kf-glow) 15%, transparent) 180deg, color-mix(in srgb, var(--kf-glow) 9%, transparent) 185deg, transparent 200deg); }
+.kf-outline { color: transparent; -webkit-text-stroke: 1px rgba(239,236,230,.55); }
+.kf-finale { background: radial-gradient(ellipse at 50% 38%, color-mix(in srgb, var(--kf-glow) 12%, #0a0a0b) 0%, #0a0a0b 62%); }

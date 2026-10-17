@@ -14,11 +14,15 @@ import { ImageReveal, Lines, Reveal } from "./Reveal";
 import { ProductCard, Viewer3D } from "./Shop";
 import { Lookbook } from "./Lookbook";
 import { collections, findProduct, money, products } from "@/lib/products";
+import { COLORWAYS, GLOW, HOODIE, useCi, useColorway } from "@/lib/colorway";
 
 const HeroScene = dynamic(() => import("./three/HeroScene"), { ssr: false });
 const AnatomyScene = dynamic(() => import("./three/AnatomyScene"), { ssr: false });
 const RunwayScene = dynamic(() => import("./three/RunwayScene"), { ssr: false });
 const PreviewScene = dynamic(() => import("./three/PreviewScene"), { ssr: false });
+const FabricScene = dynamic(() => import("./three/FabricScene"), { ssr: false });
+const FinaleScene = dynamic(() => import("./three/FinaleScene"), { ssr: false });
+const VelocityStrip = dynamic(() => import("./VelocityStrip"), { ssr: false });
 const RUNWAY = ["technical-jacket", "essential-heavyweight-hoodie", "studio-bomber", "premium-cargo-pants", "denim-trucker", "signature-oversized-tee"].map((s) => findProduct(s)!);
 
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
@@ -28,6 +32,34 @@ function useReduced() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   return mounted && !!r;
+}
+
+/** Colourway picker. The choice is stored and carries through the page and into the product page. */
+function Swatches({ className = "" }: { className?: string }) {
+  const ci = useCi();
+  const setCi = useColorway((s) => s.setCi);
+  const c = COLORWAYS[ci];
+  return (
+    <div className={`pointer-events-auto flex-col gap-3 ${className}`}>
+      <div role="radiogroup" aria-label="Hoodie colour" className="flex gap-3">
+        {COLORWAYS.map((w, i) => (
+          <button key={w.name} role="radio" aria-checked={i === ci} aria-label={w.name} onClick={() => setCi(i)}
+            className={`h-8 w-8 rounded-full border transition-[transform,box-shadow] duration-300 hover:scale-110 md:h-7 md:w-7 ${i === ci ? "scale-110 border-bone shadow-[0_0_0_3px_#070708,0_0_0_4px_rgba(239,236,230,.8)]" : "border-white/30"}`}
+            style={{ background: w.hex }} />
+        ))}
+      </div>
+      <Link href={`/product/${HOODIE.slug}?color=${ci}`} className="text-[10px] uppercase tracking-[0.28em] text-fog underline-offset-8 hover:text-bone hover:underline">
+        {c.name} · Shop this colour {money(HOODIE.price)}
+      </Link>
+    </div>
+  );
+}
+
+/** Mirrors the chosen colourway into a page-wide glow tint (CSS custom property, animated via @property). */
+function GlowSync() {
+  const ci = useCi();
+  useEffect(() => { document.documentElement.style.setProperty("--kf-glow", GLOW[COLORWAYS[ci].name] ?? "#efece6"); }, [ci]);
+  return null;
 }
 
 /**
@@ -40,6 +72,7 @@ function Hero() {
   const stage = useRef<HTMLDivElement>(null);
   const scroll = useRef(0);
   const reduced = useReduced();
+  const ci = useCi();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   // unpinned under reduced motion, so progress would jump straight to 1: hold the opening pose instead
   useEffect(() => {
@@ -79,7 +112,7 @@ function Hero() {
       <motion.div ref={stage} style={m({ clipPath: clip })} className="sticky top-0 h-[100svh] min-h-[640px] overflow-hidden grain bg-[#070708]">
         {/* far plane: light cone */}
         <motion.div style={m({ y: farY, scale: farS })} className="pointer-events-none absolute inset-[-10%] bg-[radial-gradient(ellipse_at_50%_38%,#2e2e35_0%,#141417_45%,#070708_75%)]" />
-        <div className="pointer-events-none absolute left-1/2 top-[-20%] h-[90%] w-[60vw] -translate-x-1/2 bg-[conic-gradient(from_180deg_at_50%_0%,transparent_160deg,rgba(239,236,230,.07)_175deg,rgba(239,236,230,.11)_180deg,rgba(239,236,230,.07)_185deg,transparent_200deg)] blur-2xl" />
+        <div className="kf-cone pointer-events-none absolute left-1/2 top-[-20%] h-[90%] w-[60vw] -translate-x-1/2 blur-2xl" />
         {/* mid plane: wordmark, behind the garment, counter-parallax to the pointer */}
         <motion.div style={m({ y: wy, scale: ws })} className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="transition-transform duration-700 ease-out [transform:translate3d(calc(var(--mx,0)*-26px),calc(var(--my,0)*-16px),0)]">
@@ -89,11 +122,12 @@ function Hero() {
           </div>
         </motion.div>
         {/* subject + near dust (WebGL) */}
-        <div className="absolute inset-0" data-cursor="ROTATE"><InView margin="0px" className="h-full"><HeroScene scroll={scroll} /></InView></div>
+        <div className="absolute inset-0" data-cursor="ROTATE"><InView margin="0px" className="h-full"><HeroScene scroll={scroll} color={COLORWAYS[ci].hex} instant={reduced} /></InView></div>
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(0,0,0,.7)_100%)]" />
 
         {/* beat 1 */}
         <motion.div style={m({ opacity: op1, y: y1, scale: s1 })} className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center pb-14 text-center md:pb-20">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.2, duration: 1 }} className="md:hidden"><Swatches className="mb-6 flex items-center" /></motion.div>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.4, duration: 1 }} className="display text-3xl text-bone md:text-5xl">Define your <em>form.</em></motion.h1>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.7, duration: 1 }} className="pointer-events-auto mt-7 flex w-full flex-col gap-3 px-8 sm:w-auto sm:flex-row sm:gap-4 sm:px-0">
             <Magnetic><Link href="/shop?gender=men" className="btn btn-solid w-full sm:w-auto">Shop Men</Link></Magnetic>
@@ -109,6 +143,13 @@ function Hero() {
             </div>
           </motion.div>
         )}
+        {/* desktop colourway picker, clear of the garment */}
+        <motion.div style={m({ opacity: op1 })} className="absolute bottom-20 right-10 hidden md:block">
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 2.6, duration: 1 }}>
+            <p className="mb-3 text-right text-[10px] tracking-[0.3em] text-fog">COLOURWAY</p>
+            <Swatches className="flex items-end" />
+          </motion.div>
+        </motion.div>
         <div className="absolute left-5 top-28 hidden text-[10px] tracking-[0.3em] text-fog md:block md:left-10">CAMPAIGN 2027<br /><span className="text-bone/70">THE NEW FORM</span></div>
         <div className="absolute right-5 top-28 hidden text-right text-[10px] tracking-[0.3em] text-fog md:block md:right-10">N° 01 / SS27<br /><span className="text-bone/70">HEAVYWEIGHT FLEECE</span></div>
       </motion.div>
@@ -160,6 +201,7 @@ function Assembly() {
   const [done, setDone] = useState(false);
   const [reduced, setReduced] = useState(false);
   const bar = useRef<HTMLSpanElement>(null);
+  const ci = useCi();
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { progress.current = 1; setReduced(true); setStage(STAGES.length - 1); setDone(true); return; }
@@ -178,7 +220,7 @@ function Assembly() {
   return (
     <section ref={ref} className={`relative ${reduced ? "" : "h-[520vh]"}`} id="assembly" aria-label="The anatomy of a K&F hoodie">
       <div className={`${reduced ? "relative min-h-screen" : "sticky top-0 h-[100svh]"} overflow-hidden bg-[radial-gradient(ellipse_at_60%_45%,#26262c_0%,#121214_60%,#070708_100%)]`}>
-        <div className="absolute inset-x-0 top-12 bottom-[38%] md:inset-0 md:left-[18%] md:top-0" data-cursor="WATCH"><InView margin="500px" className="h-full"><AnatomyScene progress={progress} /></InView></div>
+        <div className="absolute inset-x-0 top-12 bottom-[38%] md:inset-0 md:left-[18%] md:top-0" data-cursor="WATCH"><InView margin="500px" className="h-full"><AnatomyScene progress={progress} color={COLORWAYS[ci].hex} /></InView></div>
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.7)_0%,transparent_45%)] max-md:bg-[linear-gradient(0deg,rgba(0,0,0,.85)_0%,transparent_55%)]" />
 
         <div className="absolute left-5 top-24 md:left-10"><p className="eyebrow">The anatomy of a hoodie</p></div>
@@ -193,7 +235,7 @@ function Assembly() {
           <AnimatePresence>
             {done && (
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="pointer-events-auto mt-8 flex flex-wrap items-center gap-4">
-                <Magnetic><Link href="/product/essential-heavyweight-hoodie" className="btn btn-solid">Shop the hoodie · $120</Link></Magnetic>
+                <Magnetic><Link href={`/product/${HOODIE.slug}?color=${ci}`} className="btn btn-solid">Shop the hoodie · {COLORWAYS[ci].name} · {money(HOODIE.price)}</Link></Magnetic>
                 <Link href="/try-on?item=essential-heavyweight-hoodie" className="text-[11px] uppercase tracking-[0.24em] text-fog underline underline-offset-8 hover:text-bone">Try it on</Link>
               </motion.div>
             )}
@@ -301,6 +343,50 @@ function Coverflow() {
   );
 }
 
+/** Facts from the hoodie's own spec only. */
+const FABRIC = [
+  ["480 grams per square metre.", "Heavy enough to hold its shape on its own."],
+  ["Brushed back. Garment-washed.", "A lived-in hand from the first wear."],
+  ["100% organic cotton.", "Ribbed cuffs and hem with 2% elastane, so they spring back."],
+] as const;
+
+/** Pinned macro: the camera dollies from a draped swatch (in the chosen colourway) down into the loops. */
+function Fabric() {
+  const ref = useRef<HTMLElement>(null);
+  const progress = useRef(0);
+  const reduced = useReduced();
+  const ci = useCi();
+  const [stage, setStage] = useState(0);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  useEffect(() => {
+    const on = (v: number) => { progress.current = reduced ? 0.8 : v; setStage(Math.min(FABRIC.length - 1, Math.floor(v * FABRIC.length * 0.999))); };
+    on(scrollYProgress.get());
+    return scrollYProgress.on("change", on);
+  }, [scrollYProgress, reduced]);
+  const c = COLORWAYS[ci];
+  return (
+    <section ref={ref} className={`relative ${reduced ? "" : "h-[240vh]"}`} aria-label="The cloth">
+      <div className={`${reduced ? "relative h-[100svh]" : "sticky top-0 h-[100svh]"} overflow-hidden bg-ink`}>
+        <div className="absolute inset-0" data-cursor="LIGHT"><InView margin="900px" unmount className="h-full"><FabricScene progress={progress} color={c.hex} sheen={GLOW[c.name] ?? "#efece6"} /></InView></div>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,.65)_100%)]" />
+        <div className="absolute left-5 top-24 md:left-10"><p className="eyebrow">The cloth · shown in {c.name}</p></div>
+        <div className="pointer-events-none absolute bottom-20 left-0 right-0 bg-[linear-gradient(0deg,rgba(10,10,11,.85)_0%,transparent_100%)] px-5 pb-4 pt-24 md:bottom-0 md:right-auto md:w-[min(40rem,60vw)] md:bg-[radial-gradient(ellipse_at_0%_100%,rgba(10,10,11,.85)_0%,transparent_70%)] md:px-10 md:pb-16">
+          {reduced ? (
+            <ul className="space-y-6">{FABRIC.map(([h, t]) => <li key={h}><h3 className="display text-3xl md:text-5xl">{h}</h3><p className="mt-2 text-sm text-fog">{t}</p></li>)}</ul>
+          ) : (
+            <AnimatePresence mode="wait">
+              <motion.div key={stage} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
+                <h3 className="display text-4xl md:text-7xl">{FABRIC[stage][0]}</h3>
+                <p className="mt-4 max-w-sm text-sm leading-relaxed text-fog">{FABRIC[stage][1]}</p>
+              </motion.div>
+            </AnimatePresence>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Collections() {
   return (
     <section id="collections" className="wrap py-24 md:py-40">
@@ -329,6 +415,7 @@ function Collections() {
 
 function Configurator() {
   const p = products[0];
+  const ci = useCi();
   const [view3d, setView3d] = useState(false);
   return (
     <section className="relative overflow-hidden border-y border-white/10 bg-char py-24 md:py-32">
@@ -340,11 +427,11 @@ function Configurator() {
           <div className="mt-10"><Magnetic><button onClick={() => setView3d(true)} className="btn btn-solid">Open 3D studio</button></Magnetic></div>
         </div>
         <button type="button" aria-label="Open the 3D studio" className="relative aspect-square w-full overflow-hidden border border-white/10 bg-[radial-gradient(ellipse_at_50%_40%,#26262c_0%,#121214_70%)] md:aspect-[4/5]" data-cursor="ROTATE" onClick={() => setView3d(true)}>
-          <InView margin="200px" unmount className="absolute inset-0"><PreviewScene garment={p.garment} color={p.colors[0].hex} material="fleece" /></InView>
+          <InView margin="200px" unmount className="absolute inset-0"><PreviewScene garment={p.garment} color={COLORWAYS[ci].hex} material="fleece" /></InView>
           <span className="absolute inset-x-0 bottom-4 text-center text-[10px] tracking-[0.3em] text-fog">TAP TO ENTER STUDIO</span>
         </button>
       </div>
-      <AnimatePresence>{view3d && <Viewer3D p={p} initialColor={0} onClose={() => setView3d(false)} />}</AnimatePresence>
+      <AnimatePresence>{view3d && <Viewer3D p={p} initialColor={ci} onClose={() => setView3d(false)} />}</AnimatePresence>
     </section>
   );
 }
@@ -450,6 +537,33 @@ function Accessories() {
   );
 }
 
+/** The close: the chrome mark assembles as it arrives, then holds above the final action. */
+function Finale() {
+  const ref = useRef<HTMLElement>(null);
+  const progress = useRef(0);
+  const reduced = useReduced();
+  const ci = useCi();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
+  useEffect(() => {
+    const on = (v: number) => (progress.current = reduced ? 1 : v);
+    on(scrollYProgress.get());
+    return scrollYProgress.on("change", on);
+  }, [scrollYProgress, reduced]);
+  const c = COLORWAYS[ci];
+  return (
+    <section ref={ref} className="kf-finale relative h-[100svh] min-h-[640px] overflow-hidden" aria-label="Define your form">
+      <div className="absolute inset-x-0 bottom-[34%] top-0 md:bottom-[30%]" data-cursor="K&F"><InView margin="400px" unmount className="h-full"><FinaleScene progress={progress} glow={GLOW[c.name]} /></InView></div>
+      <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-5 pb-24 text-center md:pb-20">
+        <h2 className="display text-5xl md:text-8xl"><Lines lines={["Define your form."]} /></h2>
+        <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
+          <Magnetic><Link href="/shop" className="btn btn-solid w-full sm:w-auto">Shop the collection</Link></Magnetic>
+          <Magnetic><Link href={`/product/${HOODIE.slug}?color=${ci}`} className="btn btn-ghost w-full sm:w-auto">The hoodie in {c.name}</Link></Magnetic>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Featured() {
   return (
     <section className="wrap py-24 md:py-40">
@@ -462,10 +576,13 @@ function Featured() {
 export default function Home() {
   return (
     <>
+      <GlowSync />
       <Hero />
       <Manifesto />
       <Assembly />
       <Editorial />
+      <VelocityStrip />
+      <Fabric />
       <Collections />
       <Accessories />
       <Configurator />
@@ -474,6 +591,7 @@ export default function Home() {
       <Runway />
       <section className="py-24 md:py-40"><div className="wrap mb-12"><p className="eyebrow">Lookbook</p><h2 className="display mt-3 text-5xl md:text-8xl"><Lines lines={["Shop the look"]} /></h2></div><Lookbook /></section>
       <Featured />
+      <Finale />
     </>
   );
 }

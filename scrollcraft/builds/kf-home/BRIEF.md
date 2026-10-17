@@ -63,3 +63,32 @@ The peak is unchanged: "I scrolled and the hoodie built itself." The act before 
 
 ## Reduced motion
 All new scroll and pointer transforms are disabled. The hero is not pinned, the coverflow is a plain scrollable row, and the ring shows a static frame.
+
+---
+
+# Pass 3: four additions (2026-10-16)
+
+**Owner's direction, verbatim:** "add more stuff to the side and make it unreal with the stuff i want it like super professional please like the best". Asked which additions; the owner picked all four offered: **Live colour switch, Fabric close-up, Grand finale, Motion text strip**. Execution details below are authored.
+
+## The additions
+
+| Addition | Where | What it does | Device |
+|---|---|---|---|
+| Live colour switch | Hero, then page-wide | Four real colourways of the hoodie (Onyx, Bone, Ash, Oxblood). Picking one spins the 3D hoodie a full turn and it lands in the new colour; the hero light tints to match. The choice carries into the Assembly, the fabric close-up, the 3D studio preview, the finale and the product page (`?color=`). | pointer state |
+| Motion text strip | After the line-up | FORM · FUNCTION · IDENTITY in two giant rows moving in opposite directions; they speed up and lean with scroll velocity. | velocity |
+| Fabric close-up | After the strip | Pinned. The camera dollies from a folded swatch of the chosen colour down to the loop texture of the fleece. On a mouse, the light follows the pointer. Copy comes from the real product spec only (480gsm, brushed back, garment-washed, 2% elastane rib). | pin + 3D macro |
+| Grand finale | Last section before the footer | A polished 3D K&F mark assembles as it comes into view (K from the left, & from depth, F from the right), tilts toward the pointer, and holds above the final action. | 3D pointer |
+
+## Feeling curve additions
+- Hero: **ownership**. The visitor chooses the colour and the page answers.
+- Motion strip: **release** after the quiet coverflow; speed under the hand.
+- Fabric: **intimacy**. The closest you can get to touching it through a screen.
+- Finale: **resolution**. The mark assembles and holds; the page ends on a decision, not a fade.
+
+The peak is unchanged: the Assembly. It keeps the largest span (520vh).
+
+## Tell-someone sentence (updated)
+It's the site where you pick your colour and the hoodie spins into it, then builds itself as you scroll.
+
+## Reduced motion
+The colour switch changes the colour without the spin. The strip is static. The fabric section is unpinned and shows the macro frame. The finale mark is shown assembled.

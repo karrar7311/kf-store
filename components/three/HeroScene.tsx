@@ -1,13 +1,25 @@
 "use client";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import * as THREE from "three";
 import Garment3D from "./Garment3D";
 import { Particles, StudioLights } from "./Studio";
 
-function Rig({ scroll }: { scroll: React.MutableRefObject<number> }) {
+const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+/** Colour switch: the hoodie spins a full turn and lands in the new colour, swapping while side-on. */
+function Rig({ scroll, color, instant }: { scroll: React.MutableRefObject<number>; color: string; instant: boolean }) {
   const g = useRef<THREE.Group>(null);
+  const [shown, setShown] = useState(color);
+  const spin = useRef<{ start: number; to: string; swapped: boolean } | null>(null);
+  const clock = useThree((s) => s.clock);
+  useEffect(() => {
+    if (color === shown && !spin.current) return;
+    if (instant) { setShown(color); return; }
+    spin.current = { start: clock.elapsedTime, to: color, swapped: false };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [color]);
   const { size } = useThree();
   const aspect = size.width / size.height;
   const sc = aspect < 0.8 ? 0.5 : aspect < 1.2 ? 0.62 : 0.72;
@@ -21,11 +33,21 @@ function Rig({ scroll }: { scroll: React.MutableRefObject<number> }) {
     s.camera.lookAt(0, -p * 0.25, 0);
     // second beat: the hoodie turns to show its back as the stage holds
     const turn = THREE.MathUtils.smoothstep(p, 0.25, 0.75) * Math.PI;
-    if (g.current) g.current.rotation.y += (Math.sin(t * 0.35) * 0.45 * (1 - p) + turn - g.current.rotation.y) * k;
+    if (!g.current) return;
+    const base = Math.sin(t * 0.35) * 0.45 * (1 - p) + turn;
+    if (spin.current) {
+      const u = Math.min(1, (t - spin.current.start) / 1.1);
+      if (u > 0.42 && !spin.current.swapped) { spin.current.swapped = true; setShown(spin.current.to); }
+      // a full turn lands on the same angle, so finishing snaps to base without unwinding
+      g.current.rotation.y = u >= 1 ? base : base + ease(u) * Math.PI * 2;
+      if (u >= 1) spin.current = null;
+    } else {
+      g.current.rotation.y += (base - g.current.rotation.y) * k;
+    }
   });
   return (
     <Float speed={1.1} rotationIntensity={0.08} floatIntensity={0.5}>
-      <group ref={g} scale={sc} position={[0, 0.12, 0]}><Garment3D garment="hoodie" color="#1a1a1f" material="fleece" /></group>
+      <group ref={g} scale={sc} position={[0, 0.12, 0]}><Garment3D garment="hoodie" color={shown} material="fleece" /></group>
     </Float>
   );
 }
@@ -64,12 +86,12 @@ function NearDust({ scroll, count = 26 }: { scroll: React.MutableRefObject<numbe
   );
 }
 
-export default function HeroScene({ scroll }: { scroll: React.MutableRefObject<number> }) {
+export default function HeroScene({ scroll, color = "#1a1a1f", instant = false }: { scroll: React.MutableRefObject<number>; color?: string; instant?: boolean }) {
   return (
     <Canvas shadows dpr={[1, 1.6]} camera={{ fov: 32, position: [0, 0.2, 6.4] }} gl={{ antialias: true, alpha: true, powerPreference: "high-performance", toneMapping: THREE.ACESFilmicToneMapping }}>
       <StudioLights />
       <Particles />
-      <Rig scroll={scroll} />
+      <Rig scroll={scroll} color={color} instant={instant} />
       <NearDust scroll={scroll} />
     </Canvas>
   );

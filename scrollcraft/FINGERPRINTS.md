@@ -45,6 +45,9 @@ as a constraint, so writing them down is the whole point.
 - Signature move: scroll-assembled 3D garment (kf-home).
 - Hero: pinned WebGL garment in front of a giant wordmark, turning to show its back (kf-home).
 - Devices: pinned 3D coverflow driven by vertical scroll; CSS 3D ring of photographs turned by scroll (kf-home).
+- Interaction: colourway picker where the 3D product spins a full turn into the new colour and the choice carries page-wide and into the product page (kf-home, pass 3).
+- Devices: pinned 3D fabric macro dolly with a pointer-driven light; scroll-velocity word strip (kf-home, pass 3).
+- Close: chrome 3D wordmark that assembles on arrival above the final action (kf-home, pass 3).
 
 ---
 

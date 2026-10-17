@@ -1,4 +1,4 @@
-// Section-by-section scroll verification: node scripts/motionshots.mjs [baseUrl] [outDir]
+// Section-by-section scroll verification: node scripts/motionshots.mjs [baseUrl] [outDir] [sections,csv] [modes,csv]
 // Samples every motion section at several positions on desktop, phone and reduced motion,
 // and reports console errors, horizontal overflow and empty frames.
 import puppeteer from "puppeteer-core";
@@ -17,20 +17,24 @@ const SECTIONS = [
   ["coverflow", "section[aria-label='The line-up']", [0.05, 0.5, 0.95]],
   ["collections", "#collections", [0.1]],
   ["campaign", "section.grain:not(:first-child)", [0.15, 0.4, 0.65]],
+  ["strip", "section[aria-label='Form, Function, Identity']", [-0.3]],
+  ["fabric", "section[aria-label='The cloth']", [0.05, 0.5, 0.95]],
+  ["finale", "section[aria-label='Define your form']", [-0.5, 0]],
 ];
 const MODES = [
   ["desktop", { width: 1440, height: 900 }, false],
   ["mobile", { width: 390, height: 844, isMobile: true, hasTouch: true, deviceScaleFactor: 1 }, false],
   ["reduced", { width: 1440, height: 900 }, true],
 ];
-for (const [mode, vp, reduced] of MODES) {
+const ONLY = process.argv[4] ? process.argv[4].split(",") : null, MODE_ONLY = process.argv[5] ? process.argv[5].split(",") : null;
+for (const [mode, vp, reduced] of MODES.filter(([m]) => !MODE_ONLY || MODE_ONLY.includes(m))) {
   const page = await browser.newPage(); await page.setViewport(vp);
   if (reduced) await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
   await page.evaluateOnNewDocument(() => { Element.prototype.requestPointerLock = () => {}; Element.prototype.setPointerCapture = () => {}; sessionStorage.setItem("kf-loaded", "1"); });
   const errors = []; page.on("pageerror", (e) => errors.push(e.message.slice(0, 160))); page.on("console", (m) => m.type() === "error" && errors.push(m.text().slice(0, 160)));
   await page.goto(BASE + "/", { waitUntil: "networkidle2", timeout: 120000 });
   await sleep(4000);
-  for (const [name, sel, ps] of SECTIONS) {
+  for (const [name, sel, ps] of SECTIONS.filter(([n]) => !ONLY || ONLY.includes(n))) {
     const r = await page.evaluate((sel) => {
       const el = [...document.querySelectorAll(sel)].find((e) => e.offsetHeight > 0); if (!el) return null;
       const b = el.getBoundingClientRect(); return { top: b.top + scrollY, h: b.height, vh: innerHeight };

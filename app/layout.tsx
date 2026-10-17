@@ -9,6 +9,8 @@ const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap
 export const metadata: Metadata = {
   title: { default: "K&F — Define Your Form", template: "%s — K&F" },
   description: "K&F is a contemporary fashion house. Form, function, identity. Campaign 2027.",
+  // static file so the link carries the GitHub Pages base path (the file-convention route drops it)
+  manifest: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/manifest.webmanifest`,
   appleWebApp: { capable: true, title: "K&F", statusBarStyle: "black-translucent" },
 };
 export const viewport: Viewport = { themeColor: "#0a0a0b", width: "device-width", initialScale: 1, viewportFit: "cover" };

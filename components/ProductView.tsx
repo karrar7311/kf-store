@@ -19,6 +19,8 @@ export default function ProductView({ p }: { p: Product }) {
   const [err, setErr] = useState(false), [tab, setTab] = useState<string | null>("material");
   const addBtn = useRef<HTMLButtonElement>(null);
   const add = useStore((s) => s.add), setCartOpen = useStore((s) => s.setCartOpen);
+  // deep link from the homepage colour switch: /product/<slug>?color=<index>
+  useEffect(() => { const c = Number(new URLSearchParams(location.search).get("color")); if (Number.isInteger(c) && c > 0 && c < p.colors.length) setCi(c); }, [p.colors.length]);
   const color = p.colors[ci];
   const touch = useRef(0);
 
@@ -63,7 +65,7 @@ export default function ProductView({ p }: { p: Product }) {
           <p className="mt-2 text-xs text-fog">★ {p.rating} · {p.reviews} reviews</p>
           <p className="mt-6 text-sm leading-relaxed text-fog">{p.description}</p>
 
-          <p className="eyebrow mb-3 mt-8">Color — <span className="text-bone">{color.name}</span></p>
+          <p className="eyebrow mb-3 mt-8">Color: <span className="text-bone">{color.name}</span></p>
           <div className="flex gap-3">{p.colors.map((c, i) => <button key={c.name} aria-label={c.name} aria-pressed={i === ci} onClick={() => setCi(i)} className={`h-9 w-9 rounded-full border transition ${i === ci ? "ring-1 ring-bone ring-offset-2 ring-offset-ink" : "border-white/30"}`} style={{ background: c.hex }} />)}</div>
 
           <div className="mb-3 mt-8 flex justify-between"><p className={`eyebrow ${err ? "!text-red-400" : ""}`}>{err ? "Please select a size" : "Size"}</p><button onClick={() => setGuide(true)} className="text-[10px] uppercase tracking-[0.2em] text-fog underline underline-offset-4 hover:text-bone">Size guide</button></div>
