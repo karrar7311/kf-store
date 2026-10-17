@@ -11,11 +11,11 @@ import type { Garment, Material } from "@/lib/products";
  * Offline render stage: /studio?garment=hoodie&color=16161a&material=fleece&view=front
  * scripts/render.mjs screenshots this page to produce the site's product photography.
  */
-const DIST: Record<Garment, number> = { hoodie: 9.2, tee: 8.2, jacket: 9.8, bomber: 8.6, pants: 10.4, cap: 7.2, beanie: 6.6, tote: 8.6, sunglasses: 8.4, belt: 8.4, scarf: 10 };
-const CENTER: Record<Garment, number> = { hoodie: -0.05, tee: 0.1, jacket: 0.05, bomber: 0.15, pants: -0.1, cap: 0.25, beanie: 0.25, tote: 0, sunglasses: 0, belt: 0, scarf: 0 };
-const GROUND: Partial<Record<Garment, number>> = { cap: -0.62, pants: -1.75, beanie: -0.62, tote: -0.98, sunglasses: -0.5, belt: -1.3, scarf: -1.5 };
+const DIST: Record<Garment, number> = { hoodie: 9.2, tee: 8.2, jacket: 9.8, bomber: 8.6, pants: 10.4, cap: 7.2, beanie: 6.6, tote: 8.6, sunglasses: 8.4, belt: 8.4, scarf: 10, sweater: 9.2, shorts: 7.4, vest: 9.2, coat: 12 };
+const CENTER: Record<Garment, number> = { hoodie: -0.05, tee: 0.1, jacket: 0.05, bomber: 0.15, pants: -0.1, cap: 0.25, beanie: 0.25, tote: 0, sunglasses: 0, belt: 0, scarf: 0, sweater: -0.05, shorts: 0.45, vest: 0.1, coat: -0.5 };
+const GROUND: Partial<Record<Garment, number>> = { cap: -0.62, pants: -1.75, beanie: -0.62, tote: -0.98, sunglasses: -0.5, belt: -1.3, scarf: -1.5, shorts: -0.75, coat: -2.5 };
 /** close-up target + distance for accessories */
-const DET: Partial<Record<Garment, { t: number[]; d: number }>> = { beanie: { t: [0, -0.15, 0.9], d: 2.6 }, tote: { t: [0, 0, 0.3], d: 3.2 }, sunglasses: { t: [0.62, 0, 0.1], d: 2.2 }, belt: { t: [0, 1.1, 0.03], d: 2.2 }, scarf: { t: [0, -1.05, 0.25], d: 2.8 } };
+const DET: Partial<Record<Garment, { t: number[]; d: number }>> = { beanie: { t: [0, -0.15, 0.9], d: 2.6 }, tote: { t: [0, 0, 0.3], d: 3.2 }, sunglasses: { t: [0.62, 0, 0.1], d: 2.2 }, belt: { t: [0, 1.1, 0.03], d: 2.2 }, scarf: { t: [0, -1.05, 0.25], d: 2.8 }, coat: { t: [-0.2, 0.75, 0.45], d: 2.8 }, shorts: { t: [0, 0.95, 0.4], d: 2.8 } };
 
 function Rig({ view, garment }: { view: string; garment: Garment }) {
   const { camera } = useThree();

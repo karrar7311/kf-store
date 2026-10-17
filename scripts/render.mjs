@@ -4,7 +4,7 @@ import puppeteer from "puppeteer-core";
 import fs from "node:fs";
 
 const BASE = process.env.BASE ?? "http://localhost:3100";
-const EDGE = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe";
+const EDGE = process.env.CHROME_PATH ?? ["/usr/bin/google-chrome", "C:/Program Files/Google/Chrome/Application/chrome.exe", "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"].find((p) => fs.existsSync(p));
 const VIEWS = ["front", "back", "side", "detail", "model", "fabric", "lifestyle", "wide"];
 const FORCE = process.env.FORCE === "1";
 const onlyG = process.argv[2] && process.argv[2] !== "all" ? process.argv[2] : null;
@@ -24,7 +24,7 @@ const manifest = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manife
 
 const browser = await puppeteer.launch({
   executablePath: EDGE, headless: "new",
-  args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--no-sandbox"],
+  args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--no-sandbox", "--disable-dev-shm-usage"],
 });
 const page = await browser.newPage();
 await page.setViewport({ width: 900, height: 1125, deviceScaleFactor: 1 });

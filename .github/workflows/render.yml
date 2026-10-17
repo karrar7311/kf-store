@@ -1,0 +1,58 @@
+name: Render product photos
+# Renders studio photographs from the 3D garments on GitHub's servers (nothing runs on a personal PC),
+# commits them to public/img, then re-runs the Pages deploy.
+on:
+  push:
+    paths: ["render-request.txt"]
+  workflow_dispatch:
+    inputs:
+      garments:
+        description: "Garments to render (space separated), e.g. 'sweater shorts vest coat'"
+        default: "sweater shorts vest coat"
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency: { group: render, cancel-in-progress: false }
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - name: Start server
+        run: |
+          nohup npx next start -p 3100 > server.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://localhost:3100/api/products > /dev/null && break; sleep 2; done
+          curl -sf http://localhost:3100/api/products | head -c 80
+      - name: Render
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+          FORCE: "1"
+        run: |
+          : > render-log.txt
+          G="${{ github.event.inputs.garments }}"
+          if [ -z "$G" ]; then G="$(cat render-request.txt)"; fi
+          echo "garments: $G" | tee -a render-log.txt
+          for g in $G; do
+            node scripts/render.mjs "$g" all 2>&1 | grep -v "^    at" | tee -a render-log.txt || true
+          done
+          ls public/img | wc -l | tee -a render-log.txt
+      - name: Commit photos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/img render-log.txt
+          git commit -m "Render product photos (CI)" || echo "nothing to commit"
+          git pull --rebase origin main
+          git push origin HEAD:main
+      - name: Deploy site
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref main

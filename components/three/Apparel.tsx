@@ -56,7 +56,7 @@ export function logoTexture(color: string) {
 /* ------------------------------------------------------------------ */
 export const prof = (keys: number[][], n = 44) => new THREE.CatmullRomCurve3(keys.map((k) => new V(k[0], k[1], k[2])), false, "catmullrom", 0.5).getPoints(n);
 
-interface LoftOpt { seg?: number; fold?: number; cap?: "end" | "start" | "both" | "none"; phase?: number }
+interface LoftOpt { seg?: number; fold?: number; cap?: "end" | "start" | "both" | "none"; phase?: number; baffle?: number }
 /** Loft an elliptical tube along a path. rx/rz are per-ring radii. */
 export function loft(centers: THREE.Vector3[], rx: number[], rz: number[], o: LoftOpt = {}) {
   const seg = o.seg ?? 56, n = centers.length, fold = o.fold ?? 0.016, ph = o.phase ?? 0;
@@ -67,10 +67,11 @@ export function loft(centers: THREE.Vector3[], rx: number[], rz: number[], o: Lo
     const ref = Math.abs(t.z) > 0.9 ? new V(1, 0, 0) : new V(0, 0, 1);
     const a = new V().crossVectors(t, ref).normalize(), b = new V().crossVectors(t, a).normalize();
     if (i) len += centers[i].distanceTo(centers[i - 1]);
+    const bf = o.baffle ? 1 + o.baffle * Math.abs(Math.sin(i * 0.4)) : 1;
     for (let j = 0; j <= seg; j++) {
       const th = (j / seg) * Math.PI * 2;
       const f = 1 + fold * 6 * (Math.sin(3 * th + i * 0.3 + ph) * 0.5 + Math.sin(7 * th - i * 0.55 + ph) * 0.3 + Math.sin(i * 1.1 + th * 2) * 0.2) * (0.4 + 0.6 * Math.abs(Math.sin(th)));
-      const p = centers[i].clone().addScaledVector(a, Math.cos(th) * rx[i] * f).addScaledVector(b, Math.sin(th) * rz[i] * f);
+      const p = centers[i].clone().addScaledVector(a, Math.cos(th) * rx[i] * f * bf).addScaledVector(b, Math.sin(th) * rz[i] * f * bf);
       pos.push(p.x, p.y, p.z); uv.push((j / seg) * Math.PI * (rx[i] + rz[i]), len);
     }
   }
@@ -142,7 +143,7 @@ const HOODIE_FLY: { off: Vec; rot?: Vec }[] = [
 ];
 
 interface P { garment: Garment; color: string; material: Material; stitching?: boolean; under?: boolean; assemble?: React.MutableRefObject<number> }
-type Extra = { kind: string; pos?: number[]; size?: number[] };
+type Extra = { kind: string; pos?: number[]; size?: number[]; n?: number };
 
 export default function Apparel({ garment, color, material, stitching = true, under = false, assemble }: P) {
   const spec = MATERIALS[material];
@@ -194,15 +195,35 @@ export default function Apparel({ garment, color, material, stitching = true, un
       extras.push({ kind: bomber || material === "nylon" ? "zip" : "buttons" });
       if (!bomber && (material === "denim" || material === "wool")) extras.push({ kind: "wings" });
       if (!bomber) extras.push({ kind: "pockets" });
-    } else if (garment === "pants") {
+    } else if (garment === "sweater") {
+      T = [[1.34, .19, .15], [1.29, .41, .22], [1.17, .62, .29], [.9, .66, .33], [.2, .68, .34], [-.6, .69, .34], [-1.1, .68, .33]];
+      add(torso(T, { fold: S }));
+      add(torso([[-1.08, .68, .33], [-1.22, .62, .30], [-1.36, .60, .29]], { fold: 0.004 }), "r");
+      both(limb([[.46, .98, 0, .22], [.84, .7, .02, .245], [1.02, .12, .1, .21], [1.07, -.6, .2, .17], [1.09, -1.0, .24, .155]], { fold: S * 1.3, cap: "end" }));
+      both(limb([[1.09, -.96, .24, .15], [1.1, -1.12, .26, .145], [1.1, -1.26, .28, .14]], { fold: 0.004, cap: "end" }), "r");
+      extras.push({ kind: "neckrib" });
+    } else if (garment === "vest") {
+      T = [[1.5, .25, .21], [1.38, .26, .21], [1.28, .40, .25], [1.14, .56, .30], [.9, .64, .37], [0, .70, .40], [-.9, .70, .39], [-1.3, .68, .37]];
+      add(torso(T, { fold: S * 0.5, baffle: 0.05 }));
+      extras.push({ kind: "zip" });
+    } else if (garment === "coat") {
+      T = [[1.55, .26, .21], [1.4, .28, .22], [1.28, .44, .26], [1.14, .64, .31], [.9, .70, .35], [0, .75, .38], [-1.0, .82, .39], [-2.0, .92, .40], [-2.45, .95, .39]];
+      add(torso(T, { fold: S }));
+      both(limb([[.46, .98, 0, .23], [.86, .7, .03, .27], [1.04, .12, .12, .235], [1.1, -.7, .22, .2], [1.12, -1.15, .27, .185]], { fold: S * 1.2, cap: "end" }));
+      extras.push({ kind: "buttons", n: 9 }, { kind: "wings" });
+    } else if (garment === "pants" || garment === "shorts") {
+      const shorts = garment === "shorts";
       T = [[1.52, .70, .34], [1.40, .71, .34], [1.27, .70, .34]];
       add(torso(T, { fold: 0.005 }));
-      const cargo = material === "cotton";
+      const cargo = !shorts && material === "cotton";
       const leg = (s: number) => limb(cargo
         ? [[s * .33, 1.32, 0, .42, .37], [s * .38, .5, .01, .38, .34], [s * .36, -.5, .02, .31, .29], [s * .34, -1.3, .02, .26, .25], [s * .33, -1.62, .02, .24, .23]]
         : [[s * .33, 1.32, 0, .42, .37], [s * .37, .5, .01, .37, .33], [s * .34, -.5, .02, .30, .28], [s * .32, -1.3, .02, .24, .23], [s * .31, -1.5, .02, .20, .20]], { fold: S * 1.4, cap: "end" });
-      add(leg(1)); add(leg(-1));
-      if (!cargo) for (const s of [-1, 1]) add(limb([[s * .31, -1.46, .02, .19, .19], [s * .31, -1.58, .02, .185, .185], [s * .31, -1.72, .02, .18, .18]], { fold: 0.004, cap: "end" }), "r");
+      if (shorts) {
+        const sl = (s: number) => limb([[s * .33, 1.32, 0, .42, .37], [s * .38, .5, .01, .40, .36], [s * .38, -.2, .02, .38, .34], [s * .37, -.62, .02, .37, .33]], { fold: S * 1.2, cap: "end" });
+        add(sl(1)); add(sl(-1));
+      } else { add(leg(1)); add(leg(-1)); }
+      if (!cargo && !shorts) for (const s of [-1, 1]) add(limb([[s * .31, -1.46, .02, .19, .19], [s * .31, -1.58, .02, .185, .185], [s * .31, -1.72, .02, .18, .18]], { fold: 0.004, cap: "end" }), "r");
       if (cargo) extras.push({ kind: "cargo" });
       if (!under) extras.push({ kind: "drawcord" });
     }
@@ -213,14 +234,14 @@ export default function Apparel({ garment, color, material, stitching = true, un
     const out: THREE.Vector3[][] = [];
     if (!stitching) return out;
     const T = built.T;
-    if (T.length && garment !== "pants") {
+    if (T.length && garment !== "pants" && garment !== "shorts") {
       const p = prof(T, 60);
       out.push(p.map((q) => new V(q.y, q.x, 0)), p.map((q) => new V(-q.y, q.x, 0)));
       const hemY = T[T.length - 1][0] + 0.06, h = rzAt(T, hemY);
       out.push(Array.from({ length: 65 }, (_, i) => { const th = (i / 64) * Math.PI * 2; return new V(Math.cos(th) * (h.y + .004), hemY, Math.sin(th) * (h.z + .004)); }));
     }
-    if (garment === "pants") {
-      for (const s of [-1, 1]) { out.push([new V(s * .34, .9, .38), new V(s * .37, 0, .35), new V(s * .33, -1.55, .24)]); }
+    if (garment === "pants" || garment === "shorts") {
+      for (const s of [-1, 1]) { out.push([new V(s * .34, .9, .38), new V(s * .37, 0, .35), new V(s * .33, garment === "shorts" ? -.55 : -1.55, .24)]); }
       out.push(Array.from({ length: 65 }, (_, i) => { const th = (i / 64) * Math.PI * 2; return new V(Math.cos(th) * .735, 1.1, Math.sin(th) * .355); }));
     }
     return out;
@@ -261,7 +282,7 @@ export default function Apparel({ garment, color, material, stitching = true, un
       {L.map((p, i) => { const m = <mesh key={i} geometry={p.g} castShadow receiveShadow material={p.m === "r" ? rib : fabric} />; const f = HOODIE_FLY[i]; return assemble && f ? <Fly key={i} i={i} off={f.off} rot={f.rot} progress={assemble}>{m}</Fly> : m; })}
       {assemble ? <Gate progress={assemble} min={0.93}>{lines.map((l, i) => <Line key={i} points={l} color={stitchCol} {...dl} />)}</Gate> : lines.map((l, i) => <Line key={i} points={l} color={stitchCol} {...dl} />)}
 
-      {(garment === "tee" || garment === "hoodie" || garment === "bomber") && (() => {
+      {(garment === "tee" || garment === "hoodie" || garment === "bomber" || garment === "sweater") && (() => {
         const lg = <mesh position={[-0.3, 0.68, chestZ + 0.012]} rotation={[-0.06, 0, 0]}><planeGeometry args={[0.34, 0.17]} /><meshStandardMaterial map={logo} transparent roughness={1} polygonOffset polygonOffsetFactor={-3} /></mesh>;
         return assemble ? <Fly i={9} off={[0, 0, 3.4]} progress={assemble}>{lg}</Fly> : lg;
       })()}
@@ -281,7 +302,7 @@ export default function Apparel({ garment, color, material, stitching = true, un
           case "cords": return [-1, 1].map((s) => (
             <group key={`c${s}`}><mesh position={[s * 0.1, 0.86, 0.37]}><cylinderGeometry args={[0.014, 0.014, 0.62, 10]} /><meshStandardMaterial color={dark} roughness={0.8} /></mesh>
               <mesh position={[s * 0.1, 0.54, 0.372]} material={metal}><cylinderGeometry args={[0.022, 0.022, 0.07, 12]} /></mesh></group>));
-          case "neckrib": return <mesh key={i} position={[0, 1.34, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 0.8, 1]} material={rib}><torusGeometry args={[0.2, 0.034, 14, 56]} /></mesh>;
+          case "neckrib": return <mesh key={i} position={[0, 1.34, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 0.8, 1]} material={rib}><torusGeometry args={[0.2, garment === "sweater" ? 0.055 : 0.034, 14, 56]} /></mesh>;
           case "zip": {
             const pts = prof(T, 50).filter((q) => q.x < T[0][0] - 0.02).map((q) => new V(0, q.x, q.z + 0.012));
             return (
@@ -294,7 +315,7 @@ export default function Apparel({ garment, color, material, stitching = true, un
             );
           }
           case "buttons": return (
-            <group key={i}>{Array.from({ length: 7 }, (_, k) => { const y = 1.05 - k * 0.33; return <mesh key={k} position={[0, y, rzAt(T, y).z + 0.014]} rotation={[Math.PI / 2, 0, 0]} material={metal}><cylinderGeometry args={[0.032, 0.032, 0.02, 20]} /></mesh>; })}</group>
+            <group key={i}>{Array.from({ length: e.n ?? 7 }, (_, k) => { const y = 1.05 - k * (e.n ? 0.4 : 0.33); return <mesh key={k} position={[0, y, rzAt(T, y).z + 0.014]} rotation={[Math.PI / 2, 0, 0]} material={metal}><cylinderGeometry args={[0.032, 0.032, 0.02, 20]} /></mesh>; })}</group>
           );
           case "wings": return [-1, 1].map((s) => <mesh key={`w${s}`} position={[s * 0.2, 1.26, 0.2]} rotation={[0.55, 0, s * -0.6]} castShadow material={fabric}><boxGeometry args={[0.36, 0.2, 0.035]} /></mesh>);
           case "pockets": return [-1, 1].map((s) => <RoundedBox key={`p${s}`} args={[0.3, 0.035, 0.03]} radius={0.012} smoothness={3} rotation={[0, 0, s * 0.18]} position={[s * 0.33, 0.52, rzAt(T, 0.52).z + 0.008]} material={rib} />);

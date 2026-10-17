@@ -10,8 +10,8 @@ import type { Outfit, Piece } from "@/components/three/TryOnScene";
 
 const TryOnScene = dynamic(() => import("@/components/three/TryOnScene"), { ssr: false, loading: () => <div className="grid h-full place-items-center text-[10px] tracking-[0.3em] text-fog">LOADING FITTING ROOM</div> });
 
-const TOPS = products.filter((p) => ["hoodie", "tee", "jacket", "bomber"].includes(p.garment));
-const BOTTOMS = products.filter((p) => p.garment === "pants");
+const TOPS = products.filter((p) => ["hoodie", "tee", "jacket", "bomber", "sweater", "vest", "coat"].includes(p.garment));
+const BOTTOMS = products.filter((p) => p.garment === "pants" || p.garment === "shorts");
 const EXTRAS = products.filter((p) => p.category === "accessories");
 const SKINS = [["#f0cdb2", "Light"], ["#e0b08c", "Fair"], ["#c99a7a", "Medium"], ["#a9744f", "Tan"], ["#7b4e33", "Deep"], ["#4d2f1f", "Rich"]] as const;
 const SIZES = [["XS", 0.92], ["S", 0.96], ["M", 1], ["L", 1.05], ["XL", 1.1]] as const;
@@ -45,7 +45,7 @@ function Room() {
     ...Object.entries(acc).map(([slug, ci]) => ({ p: products.find((x) => x.slug === slug)!, ci })),
   ];
   const total = worn.reduce((a, w) => a + w.p.price, 0);
-  const sizeFor = (p: Product) => (p.sizes.includes(size) ? size : p.garment === "pants" ? PANT_SIZE[size] : p.garment === "belt" ? p.sizes[Math.min(p.sizes.length - 1, Math.max(0, SIZES.findIndex((s) => s[0] === size) - 1))] : p.sizes[0]);
+  const sizeFor = (p: Product) => (p.sizes.includes(size) ? size : (p.garment === "pants" || p.garment === "shorts") ? PANT_SIZE[size] : p.garment === "belt" ? p.sizes[Math.min(p.sizes.length - 1, Math.max(0, SIZES.findIndex((s) => s[0] === size) - 1))] : p.sizes[0]);
   const addOutfit = () => { worn.forEach(({ p, ci }) => add({ slug: p.slug, size: sizeFor(p), color: p.colors[ci].name, qty: 1 })); setAdded(true); setCartOpen(true); setTimeout(() => setAdded(false), 2500); };
 
   const Card = ({ p, active, onPick, ci }: { p: Product; active: boolean; onPick: () => void; ci: number }) => (

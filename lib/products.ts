@@ -1,4 +1,4 @@
-export type Garment = "tee" | "hoodie" | "jacket" | "pants" | "cap" | "bomber" | "beanie" | "tote" | "sunglasses" | "belt" | "scarf";
+export type Garment = "tee" | "hoodie" | "jacket" | "pants" | "cap" | "bomber" | "beanie" | "tote" | "sunglasses" | "belt" | "scarf" | "sweater" | "shorts" | "vest" | "coat";
 export type Material = "cotton" | "denim" | "leather" | "nylon" | "fleece" | "wool";
 export type Category = "outerwear" | "tops" | "bottoms" | "essentials" | "accessories";
 
@@ -152,6 +152,42 @@ export const products: Product[] = [
     description: "An oversized brushed-wool scarf with hand-twisted fringe. Wide enough to wrap twice, light enough to wear indoors.",
     details: { material: "100% extra-fine merino wool, brushed finish.", fit: "200 × 45 cm.", care: "Dry clean or hand wash cold. Dry flat." },
     rating: 4.9, reviews: 47, createdAt: "2027-03-20",
+  },
+  {
+    slug: "merino-crewneck", name: "K&F Merino Crewneck", price: 135, gender: "unisex",
+    category: "tops", garment: "sweater", material: "wool", badge: "NEW", collection: "Signature",
+    colors: [{ name: "Charcoal", hex: "#2e2f33" }, { name: "Oatmeal", hex: "#cfc6b4" }, { name: "Oxblood", hex: "#4b1620" }],
+    sizes: S, stock: stock(22),
+    description: "A dense, midweight merino crewneck with a full-fashioned shoulder, a chunky rib collar and a quiet K&F mark at the chest. Soft against the skin, structured enough to wear alone.",
+    details: { material: "100% extra-fine merino wool, 12-gauge knit.", fit: "Regular, slightly cropped body. Model wears size M.", care: "Hand wash cold or dry clean. Dry flat." },
+    rating: 4.8, reviews: 73, createdAt: "2027-03-24",
+  },
+  {
+    slug: "studio-shorts", name: "K&F Studio Shorts", price: 85, gender: "unisex",
+    category: "bottoms", garment: "shorts", material: "cotton", collection: "Essentials",
+    colors: [{ name: "Black", hex: "#141416" }, { name: "Stone", hex: "#aaa69c" }, { name: "Slate", hex: "#3a3c40" }],
+    sizes: ["28", "30", "32", "34", "36"], stock: Object.fromEntries(["28", "30", "32", "34", "36"].map((s, i) => [s, 16 - i * 2])),
+    description: "Relaxed, knee-length shorts in a heavy garment-dyed twill. Flat drawcord waist, deep side pockets and a clean raw hem that softens with every wash.",
+    details: { material: "100% organic cotton twill, 320gsm, garment dyed.", fit: "Relaxed, knee length. Model is 186cm wearing 32.", care: "Machine wash cold. Line dry." },
+    rating: 4.7, reviews: 58, createdAt: "2027-03-26",
+  },
+  {
+    slug: "padded-vest", name: "K&F Padded Vest", price: 165, gender: "unisex",
+    category: "outerwear", garment: "vest", material: "nylon", badge: "NEW", collection: "Form 01",
+    colors: [{ name: "Carbon", hex: "#1c1d21" }, { name: "Silver", hex: "#a9adb4" }, { name: "Burgundy", hex: "#4a1822" }],
+    sizes: S, stock: stock(16),
+    description: "A lightweight quilted vest in matte ripstop with recycled down-alternative fill. Channel-baffled for warmth without bulk, with a high collar and a concealed zip.",
+    details: { material: "Recycled nylon ripstop shell, 100% recycled insulation fill.", fit: "Regular, built to layer. Model wears size M.", care: "Machine wash cold, gentle. Tumble dry low." },
+    rating: 4.8, reviews: 44, createdAt: "2027-03-28",
+  },
+  {
+    slug: "wool-overcoat", name: "K&F Wool Overcoat", price: 320, gender: "unisex",
+    category: "outerwear", garment: "coat", material: "wool", badge: "LIMITED", collection: "Campaign 2027",
+    colors: [{ name: "Charcoal", hex: "#2c2d31" }, { name: "Camel", hex: "#a38d6d" }],
+    sizes: S, stock: stock(8),
+    description: "A long, single-breasted overcoat in a felted wool blend. Notch lapel, horn-tone buttons, a clean back vent and a lining you will want to show off.",
+    details: { material: "80% wool, 20% cashmere. Cupro lining.", fit: "Long, tailored through the shoulder. Model wears size M.", care: "Dry clean only." },
+    rating: 5.0, reviews: 19, createdAt: "2027-03-30",
   },
 ];
 
