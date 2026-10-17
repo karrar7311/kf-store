@@ -39,6 +39,19 @@ export function bumpTexture(p: Pattern, rep: number) {
   texCache.set(key, t); return t;
 }
 
+export function textTexture(text: string, color: string) {
+  const c = document.createElement("canvas"); c.width = 512; c.height = 256;
+  const g = c.getContext("2d")!;
+  const light = new THREE.Color(color).getHSL({ h: 0, s: 0, l: 0 }).l > 0.55;
+  g.fillStyle = light ? "rgba(20,20,22,.78)" : "rgba(235,232,226,.85)";
+  g.textAlign = "center"; g.textBaseline = "middle";
+  let size = 170;
+  g.font = `italic 500 ${size}px Georgia, 'Times New Roman', serif`;
+  while (g.measureText(text).width > 470 && size > 40) { size -= 6; g.font = `italic 500 ${size}px Georgia, 'Times New Roman', serif`; }
+  g.fillText(text, 256, 136);
+  const t = new THREE.CanvasTexture(c); t.anisotropy = 8; return t;
+}
+
 export function logoTexture(color: string) {
   const c = document.createElement("canvas"); c.width = 512; c.height = 256;
   const g = c.getContext("2d")!;
@@ -142,10 +155,10 @@ const HOODIE_FLY: { off: Vec; rot?: Vec }[] = [
   { off: [3.8, -1.0, 0.8], rot: [0, 0, 0.6] }, { off: [-3.8, -1.0, 0.8], rot: [0, 0, -0.6] },
 ];
 
-interface P { garment: Garment; color: string; material: Material; stitching?: boolean; under?: boolean; assemble?: React.MutableRefObject<number> }
+interface P { garment: Garment; color: string; material: Material; stitching?: boolean; under?: boolean; monogram?: string; assemble?: React.MutableRefObject<number> }
 type Extra = { kind: string; pos?: number[]; size?: number[]; n?: number };
 
-export default function Apparel({ garment, color, material, stitching = true, under = false, assemble }: P) {
+export default function Apparel({ garment, color, material, stitching = true, under = false, monogram, assemble }: P) {
   const spec = MATERIALS[material];
   const col = useMemo(() => new THREE.Color(color), [color]);
   const dark = useMemo(() => col.clone().multiplyScalar(0.8), [col]);
@@ -157,7 +170,7 @@ export default function Apparel({ garment, color, material, stitching = true, un
   }), [col, spec, garment]);
   const rib = useMemo(() => new THREE.MeshPhysicalMaterial({ color: dark, roughness: 0.95, sheen: 1, sheenRoughness: 0.5, sheenColor: col.clone().lerp(new THREE.Color("#fff"), 0.3), bumpMap: bumpTexture("rib", 60), bumpScale: 2.2, side: THREE.DoubleSide }), [dark, col]);
   const metal = useMemo(() => new THREE.MeshStandardMaterial({ color: "#c9ccd2", metalness: 1, roughness: 0.22 }), []);
-  const logo = useMemo(() => logoTexture(color), [color]);
+  const logo = useMemo(() => (monogram ? textTexture(monogram, color) : logoTexture(color)), [color, monogram]);
   const S = spec.fold;
 
   const built = useMemo(() => {

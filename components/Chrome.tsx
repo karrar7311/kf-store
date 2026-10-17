@@ -84,7 +84,7 @@ export function Cursor() {
 }
 
 /* ---------- Nav ---------- */
-const LINKS = [["SHOP", "/shop"], ["MEN", "/shop?gender=men"], ["WOMEN", "/shop?gender=women"], ["COLLECTIONS", "/#collections"], ["TRY ON", "/try-on"], ["ABOUT", "/about"]] as const;
+const LINKS = [["SHOP", "/shop"], ["MEN", "/shop?gender=men"], ["WOMEN", "/shop?gender=women"], ["COLLECTIONS", "/#collections"], ["TRY ON", "/try-on"], ["ATELIER", "/atelier"], ["ABOUT", "/about"]] as const;
 
 export function Nav() {
   const path = usePathname();
@@ -104,7 +104,7 @@ export function Nav() {
       <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-700 ${solid ? "border-b border-white/10 bg-ink/80 py-3 backdrop-blur-xl" : "bg-gradient-to-b from-black/50 to-transparent py-6"}`}>
         <div className="wrap grid grid-cols-[1fr_auto_1fr] items-center">
           <Link href="/" aria-label="K&F home" className="justify-self-start"><Logo variant="silver" className="text-[30px]" /></Link>
-          <nav className="hidden items-center gap-9 lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-6 xl:gap-9 lg:flex" aria-label="Primary">
             {LINKS.map(([l, h]) => (
               <Link key={l} href={h} className="group relative text-[11px] tracking-[0.26em]"><Scramble text={l} /><span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-bone transition-transform duration-500 group-hover:scale-x-100" /></Link>
             ))}
@@ -142,8 +142,8 @@ export function Nav() {
 }
 
 /* ---------- Cart drawer ---------- */
-export function subtotalOf(cart: { slug: string; qty: number }[]) {
-  return cart.reduce((a, c) => a + (findProduct(c.slug)?.price ?? 0) * c.qty, 0);
+export function subtotalOf(cart: { slug: string; qty: number; unit?: number }[]) {
+  return cart.reduce((a, c) => a + (c.unit ?? findProduct(c.slug)?.price ?? 0) * c.qty, 0);
 }
 
 export function CartDrawer() {
@@ -163,12 +163,12 @@ export function CartDrawer() {
                 const p = findProduct(l.slug)!; const c = p.colors.find((x) => x.name === l.color) ?? p.colors[0];
                 return (
                   <motion.div layout key={l.slug + l.size + l.color} className="flex gap-4 border-b border-white/10 py-6" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
-                    <div className="h-32 w-24 shrink-0 overflow-hidden"><Shot garment={p.garment} color={c.hex} /></div>
+                    <div className="h-32 w-24 shrink-0 overflow-hidden"><Shot garment={p.garment} color={l.color.match(/#[0-9a-fA-F]{6}/)?.[0] ?? c.hex} /></div>
                     <div className="flex flex-1 flex-col justify-between">
-                      <div><Link href={`/product/${p.slug}`} onClick={() => setCartOpen(false)} className="text-sm">{p.name}</Link><p className="mt-1 text-xs text-fog">{l.color} / {l.size}</p></div>
+                      <div><Link href={`/product/${p.slug}`} onClick={() => setCartOpen(false)} className="text-sm">{p.name}</Link><p className="mt-1 text-xs text-fog">{l.color} / {l.size}</p>{l.note && <p className="mt-1 text-xs text-fog/80">{l.note}</p>}</div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center border border-white/15 text-sm"><button aria-label="Decrease" className="h-8 w-8" onClick={() => setQty(l.slug, l.size, l.color, l.qty - 1)}>−</button><span className="w-6 text-center text-xs">{l.qty}</span><button aria-label="Increase" className="h-8 w-8" onClick={() => setQty(l.slug, l.size, l.color, l.qty + 1)}>+</button></div>
-                        <span className="text-sm">{money(p.price * l.qty)}</span>
+                        <span className="text-sm">{money((l.unit ?? p.price) * l.qty)}</span>
                       </div>
                       <button onClick={() => remove(l.slug, l.size, l.color)} className="self-start text-[10px] uppercase tracking-[0.2em] text-fog underline underline-offset-4 hover:text-bone">Remove</button>
                     </div>

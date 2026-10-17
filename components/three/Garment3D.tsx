@@ -5,6 +5,6 @@ import type { Garment, Material } from "@/lib/products";
 
 export const ACCESSORIES: Garment[] = ["beanie", "tote", "sunglasses", "belt", "scarf"];
 
-export default function Garment3D(props: { garment: Garment; color: string; material: Material; stitching?: boolean; worn?: boolean; under?: boolean; assemble?: React.MutableRefObject<number> }) {
-  return ACCESSORIES.includes(props.garment) ? <Accessory {...props} /> : <Apparel garment={props.garment} color={props.color} material={props.material} stitching={props.stitching} under={props.under} assemble={props.assemble} />;
+export default function Garment3D(props: { garment: Garment; color: string; material: Material; stitching?: boolean; worn?: boolean; under?: boolean; monogram?: string; assemble?: React.MutableRefObject<number> }) {
+  return ACCESSORIES.includes(props.garment) ? <Accessory {...props} /> : <Apparel garment={props.garment} color={props.color} material={props.material} stitching={props.stitching} under={props.under} monogram={props.monogram} assemble={props.assemble} />;
 }

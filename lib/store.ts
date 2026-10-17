@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export interface CartLine { slug: string; size: string; color: string; qty: number }
+export interface CartLine { slug: string; size: string; color: string; qty: number; unit?: number; note?: string }
 
 interface State {
   cart: CartLine[];

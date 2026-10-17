@@ -16,10 +16,11 @@ import { ProductCard, Viewer3D } from "./Shop";
 import { Lookbook } from "./Lookbook";
 import { collections, findProduct, money, products } from "@/lib/products";
 import { COLORWAYS, GLOW, HOODIE, useCi, useColorway } from "@/lib/colorway";
+import { LOOKS } from "@/lib/looks";
 
 const HeroScene = dynamic(() => import("./three/HeroScene"), { ssr: false });
 const AnatomyScene = dynamic(() => import("./three/AnatomyScene"), { ssr: false });
-const RunwayScene = dynamic(() => import("./three/RunwayScene"), { ssr: false });
+const ShowScene = dynamic(() => import("./three/ShowScene"), { ssr: false });
 const PreviewScene = dynamic(() => import("./three/PreviewScene"), { ssr: false });
 const FabricScene = dynamic(() => import("./three/FabricScene"), { ssr: false });
 const FinaleScene = dynamic(() => import("./three/FinaleScene"), { ssr: false });
@@ -476,6 +477,28 @@ const RING = [
 ] as const;
 
 /** The campaign stands on a 3D ring that turns with scroll; the title holds in front of it. */
+/** Atelier teaser: design your own piece. */
+function AtelierCta() {
+  const swatches = ["#16161a", "#4b1620", "#1f2a44", "#2f4a3a", "#a38d6d", "#e4dfd5"];
+  return (
+    <section className="wrap py-10 md:py-20">
+      <div className="relative grid items-center gap-10 overflow-hidden border border-white/10 bg-gradient-to-br from-char via-ink to-char p-8 md:grid-cols-[1.1fr_1fr] md:p-16">
+        <div className="relative z-10">
+          <p className="eyebrow">K&amp;F Atelier</p>
+          <h2 className="display mt-4 text-5xl md:text-8xl"><Lines lines={["Make it", "yours."]} /></h2>
+          <p className="mt-6 max-w-md text-sm leading-relaxed text-fog">Choose a base, change the fabric, pick any colour on earth and have it embroidered with your own monogram. Watch it build in 3D, then we make it to order.</p>
+          <div className="mt-6 flex gap-2.5" aria-hidden>{swatches.map((c) => <span key={c} className="h-6 w-6 rounded-full border border-white/25" style={{ background: c }} />)}</div>
+          <div className="mt-8"><Magnetic><Link href="/atelier" className="btn btn-solid">Open the atelier</Link></Magnetic></div>
+        </div>
+        <Link href="/atelier" data-cursor="DESIGN" className="relative block aspect-[4/5] overflow-hidden bg-graphite md:aspect-square">
+          <Shot garment="hoodie" color="#4b1620" view="front" sizes="(max-width:768px) 90vw, 40vw" />
+          <span className="glass absolute bottom-4 left-4 px-4 py-2 text-[10px] tracking-[0.25em]">CUSTOMISE →</span>
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 function Campaign() {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReduced();
@@ -519,22 +542,34 @@ function Runway() {
   const [idx, setIdx] = useState(0);
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    const st = ScrollTrigger.create({ trigger: ref.current, start: "top top", end: "bottom bottom", onUpdate: (s) => { progress.current = s.progress; setIdx(Math.min(RUNWAY.length - 1, Math.round(s.progress * (RUNWAY.length - 1)))); } });
+    const st = ScrollTrigger.create({
+      trigger: ref.current, start: "top top", end: "bottom bottom",
+      onUpdate: (s) => { progress.current = s.progress; setIdx(Math.max(0, Math.min(LOOKS.length - 1, Math.floor(s.progress * (LOOKS.length + 0.6) - 0.6)))); },
+    });
     return () => st.kill();
   }, []);
-  const look = RUNWAY[idx];
+  const look = LOOKS[idx];
+  const pieces = [look.top, look.bottom, ...look.acc].map((r) => findProduct(r.slug)).filter((p): p is NonNullable<typeof p> => !!p);
   return (
-    <section ref={ref} className="relative h-[400vh]" id="runway">
+    <section ref={ref} className="relative h-[620vh]" id="runway" aria-label="K&F digital runway show">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <InView margin="400px" className="absolute inset-0"><RunwayScene progress={progress} /></InView>
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,.7)_100%)]" />
-        <div className="absolute left-5 top-24 md:left-10"><p className="eyebrow">Digital show</p><h2 className="display mt-3 text-5xl md:text-8xl">K&amp;F Runway</h2></div>
-        <div className="absolute bottom-10 left-5 right-5 flex items-end justify-between md:left-10 md:right-10">
-          <div><p className="text-[10px] tracking-[0.3em] text-fog">ON THE RUNWAY</p>
-            <AnimatePresence mode="wait"><motion.div key={look.slug} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}><p className="display mt-2 text-3xl md:text-5xl">{look.name.replace("K&F ", "")}</p><Link href={`/product/${look.slug}`} className="pointer-events-auto mt-3 inline-block text-[11px] tracking-[0.25em] underline underline-offset-8 hover:opacity-70">SHOP · {money(look.price)}</Link></motion.div></AnimatePresence></div>
-          
+        <InView margin="400px" className="absolute inset-0"><ShowScene progress={progress} /></InView>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,.72)_100%)]" />
+        <div className="absolute left-5 top-24 md:left-10"><p className="eyebrow">Digital show · SS27</p><h2 className="display mt-3 text-5xl md:text-8xl">K&amp;F Runway</h2></div>
+        <div className="absolute bottom-8 left-5 right-5 md:bottom-10 md:left-10 md:right-10">
+          <AnimatePresence mode="wait">
+            <motion.div key={look.title} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.45 }} className="max-w-xl">
+              <p className="text-[10px] tracking-[0.3em] text-fog">LOOK {String(idx + 1).padStart(2, "0")} / {String(LOOKS.length).padStart(2, "0")}</p>
+              <p className="display mt-2 text-4xl md:text-6xl">{look.title}</p>
+              <p className="mt-3 max-w-md text-sm text-fog">{look.note}</p>
+              <div className="pointer-events-auto mt-4 flex flex-wrap gap-2">
+                {pieces.map((p) => <Link key={p.slug} href={`/product/${p.slug}`} className="glass px-3 py-2 text-[10px] uppercase tracking-[0.18em] transition hover:bg-bone hover:text-ink">{p.name.replace("K&F ", "")} · {money(p.price)}</Link>)}
+              </div>
+              <Link href={`/try-on?item=${look.top.slug}`} className="pointer-events-auto mt-4 inline-block text-[11px] uppercase tracking-[0.24em] underline underline-offset-8 hover:opacity-70">Try this look on →</Link>
+            </motion.div>
+          </AnimatePresence>
         </div>
-        <div className="absolute right-5 top-1/2 hidden -translate-y-1/2 flex-col gap-2 md:flex">{RUNWAY.map((_, i) => <span key={i} className={`h-6 w-px ${i === idx ? "bg-bone" : "bg-white/20"}`} />)}</div>
+        <div className="absolute right-5 top-1/2 hidden -translate-y-1/2 flex-col gap-2 md:flex">{LOOKS.map((_, i) => <span key={i} className={`h-6 w-px transition-colors ${i === idx ? "bg-bone" : "bg-white/20"}`} />)}</div>
       </div>
     </section>
   );
@@ -609,6 +644,7 @@ export default function Home() {
       <Accessories />
       <Configurator />
       <FittingRoom />
+      <AtelierCta />
       <Campaign />
       <Runway />
       <section className="py-24 md:py-40"><div className="wrap mb-12"><p className="eyebrow">Lookbook</p><h2 className="display mt-3 text-5xl md:text-8xl"><Lines lines={["Shop the look"]} /></h2></div><Lookbook /></section>
