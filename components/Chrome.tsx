@@ -9,6 +9,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Logo from "./Logo";
 import Magnetic from "./Magnetic";
 import Shot from "./Shot";
+import Scramble from "./fx/Scramble";
 import { DISCOUNTS, useStore } from "@/lib/store";
 import { findProduct, money, products } from "@/lib/products";
 
@@ -48,7 +49,9 @@ export function SmoothScroll() {
     const tick = (t: number) => lenis.raf(t * 1000);
     gsap.ticker.add(tick); gsap.ticker.lagSmoothing(0);
     (window as any).__lenis = lenis;
-    return () => { gsap.ticker.remove(tick); lenis.destroy(); };
+    // freeze page scroll while the bag, search or mobile menu is open
+    const unsub = useStore.subscribe((s) => { if (s.cartOpen || s.searchOpen || s.menuOpen) lenis.stop(); else lenis.start(); });
+    return () => { unsub(); gsap.ticker.remove(tick); lenis.destroy(); };
   }, []);
   useEffect(() => { (window as any).__lenis?.scrollTo(0, { immediate: true }); window.scrollTo(0, 0); }, [path]);
   return null;
@@ -103,7 +106,7 @@ export function Nav() {
           <Link href="/" aria-label="K&F home" className="justify-self-start"><Logo variant="silver" className="text-[30px]" /></Link>
           <nav className="hidden items-center gap-9 lg:flex" aria-label="Primary">
             {LINKS.map(([l, h]) => (
-              <Link key={l} href={h} className="group relative text-[11px] tracking-[0.26em]">{l}<span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-bone transition-transform duration-500 group-hover:scale-x-100" /></Link>
+              <Link key={l} href={h} className="group relative text-[11px] tracking-[0.26em]"><Scramble text={l} /><span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-bone transition-transform duration-500 group-hover:scale-x-100" /></Link>
             ))}
           </nav>
           <div className="col-start-3 flex items-center justify-self-end gap-5">

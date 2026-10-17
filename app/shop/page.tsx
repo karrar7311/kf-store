@@ -1,6 +1,7 @@
 "use client";
 import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import { ProductCard } from "@/components/Shop";
 import { products } from "@/lib/products";
 import { useStore } from "@/lib/store";
@@ -54,7 +55,15 @@ function Listing() {
       </div>
       <p className="mt-6 text-xs text-fog" aria-live="polite">{list.length} {list.length === 1 ? "piece" : "pieces"}</p>
       {list.length === 0 ? <p className="py-32 text-center text-fog">Nothing here yet. Try removing a filter.</p> : (
-        <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-12 pb-10 md:grid-cols-3 md:gap-x-5 xl:grid-cols-4">{list.map((p, i) => <ProductCard key={p.slug} p={p} index={i} />)}</div>
+        <motion.div layout className="mt-8 grid grid-cols-2 gap-x-3 gap-y-12 pb-10 md:grid-cols-3 md:gap-x-5 xl:grid-cols-4">
+          <AnimatePresence mode="popLayout">
+            {list.map((p, i) => (
+              <motion.div layout key={p.slug} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
+                <ProductCard p={p} index={i} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       )}
     </div>
   );

@@ -9,6 +9,7 @@ import Logo from "./Logo";
 import Magnetic from "./Magnetic";
 import Shot from "./Shot";
 import Tilt from "./Tilt";
+import CountUp from "./fx/CountUp";
 import InView from "./InView";
 import { ImageReveal, Lines, Reveal } from "./Reveal";
 import { ProductCard, Viewer3D } from "./Shop";
@@ -413,6 +414,26 @@ function Collections() {
   );
 }
 
+/** The line-up in numbers, counted from the real catalogue. */
+function Stats() {
+  const colourways = products.reduce((a, p) => a + p.colors.length, 0);
+  const fabrics = new Set(products.map((p) => p.material)).size;
+  const accessories = products.filter((p) => p.category === "accessories").length;
+  const items: [number, string][] = [[products.length, "Pieces in the line-up"], [colourways, "Colourways"], [fabrics, "Fabrics"], [accessories, "Accessories"]];
+  return (
+    <section aria-label="The line-up in numbers" className="border-y border-white/10">
+      <div className="wrap grid grid-cols-2 md:grid-cols-4">
+        {items.map(([n, label], i) => (
+          <Reveal key={label} delay={i * 0.08} className={`py-14 md:border-l md:border-white/10 md:py-20 md:pl-10 ${i % 2 ? "border-l border-white/10 pl-5" : ""} ${i === 0 ? "md:!border-l-0 md:!pl-0" : ""}`}>
+            <p className="display text-6xl md:text-8xl"><CountUp to={n} /></p>
+            <p className="eyebrow mt-3">{label}</p>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function Configurator() {
   const p = products[0];
   const ci = useCi();
@@ -584,6 +605,7 @@ export default function Home() {
       <VelocityStrip />
       <Fabric />
       <Collections />
+      <Stats />
       <Accessories />
       <Configurator />
       <FittingRoom />

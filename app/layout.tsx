@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { CartDrawer, Cursor, Footer, Loader, MobileTabBar, Nav, SearchOverlay, SmoothScroll } from "@/components/Chrome";
+import ScrollProgress from "@/components/fx/ScrollProgress";
 
 const serif = Cormorant_Garamond({ subsets: ["latin"], weight: ["300", "400", "500", "600"], style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body className="pb-[calc(60px+env(safe-area-inset-bottom))] lg:pb-0">
-        <Loader /><SmoothScroll /><Cursor /><Nav /><CartDrawer /><SearchOverlay />
+        <Loader /><SmoothScroll /><ScrollProgress /><Cursor /><Nav /><CartDrawer /><SearchOverlay />
         <main>{children}</main>
         <Footer />
         <MobileTabBar />
