@@ -24,7 +24,7 @@ const outfitOf = (l: Look): Outfit => ({
 function walkZ(t: number) {
   if (t < 0.55) return -17 + (t / 0.55) * 15;
   if (t < 0.78) return -2 + ((t - 0.55) / 0.23) * 1.0;
-  return -1 + ((t - 0.78) / 0.22) * 11;
+  return -1 + ((t - 0.78) / 0.22) * 4.5;
 }
 
 function Model({ look, i, progress }: { look: Look; i: number; progress: React.MutableRefObject<number> }) {
@@ -39,7 +39,8 @@ function Model({ look, i, progress }: { look: Look; i: number; progress: React.M
     if (!m.visible) return;
     const z = walkZ(t);
     const moving = t < 0.55 || t > 0.78;
-    m.position.set(Math.sin(t * 7 + i) * 0.22, moving ? Math.abs(Math.sin(z * 1.5)) * 0.07 : 0, z);
+    const out = Math.max(0, (t - 0.78) / 0.22);
+    m.position.set(Math.sin(t * 7 + i) * 0.22 + (i % 2 ? 1 : -1) * out * out * 8, moving ? Math.abs(Math.sin(z * 1.5)) * 0.07 : 0, z);
     m.rotation.set(0, Math.sin(z * 0.75) * 0.1, Math.sin(z * 0.75) * 0.025);
   });
   return <group ref={g} visible={false}><Figure o={outfit} /></group>;
@@ -58,8 +59,8 @@ function Backdrop() {
   }, []);
   return (
     <group position={[0, 1.2, -27]}>
-      <mesh position={[0, 0, -0.1]}><planeGeometry args={[60, 24]} /><meshStandardMaterial color="#070708" roughness={1} /></mesh>
-      <mesh><planeGeometry args={[22, 11]} /><meshBasicMaterial map={tex} transparent toneMapped={false} opacity={0.85} /></mesh>
+      <mesh position={[0, 0, -0.1]}><planeGeometry args={[60, 24]} /><meshStandardMaterial color="#09090b" roughness={1} fog={false} /></mesh>
+      <mesh><planeGeometry args={[22, 11]} /><meshBasicMaterial map={tex} transparent toneMapped={false} opacity={0.9} fog={false} /></mesh>
     </group>
   );
 }
@@ -76,14 +77,14 @@ function Stage({ progress }: { progress: React.MutableRefObject<number> }) {
     <>
       <Backdrop />
       {/* runway */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, FLOOR, -8]}><planeGeometry args={[7, 50]} /><meshStandardMaterial color="#0e0e11" roughness={0.16} metalness={0.85} /></mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, FLOOR, -8]}><planeGeometry args={[7, 50]} /><meshStandardMaterial color="#1a1a1f" roughness={0.2} metalness={0.9} envMapIntensity={1.6} /></mesh>
       {Array.from({ length: 24 }).map((_, i) => (
         <group key={i}>
           <mesh position={[-3.5, FLOOR + 0.02, 10 - i * 2.2]}><boxGeometry args={[0.06, 0.03, 1.2]} /><meshBasicMaterial color="#d8dae0" /></mesh>
           <mesh position={[3.5, FLOOR + 0.02, 10 - i * 2.2]}><boxGeometry args={[0.06, 0.03, 1.2]} /><meshBasicMaterial color="#d8dae0" /></mesh>
         </group>
       ))}
-      {[-18, -11, -4, 3, 9].map((z) => <pointLight key={z} position={[0, 5, z]} intensity={55} distance={16} decay={1.6} color="#ffffff" />)}
+      {[-18, -11, -4, 3, 9].map((z) => <pointLight key={z} position={[0, 5, z]} intensity={95} distance={18} decay={1.5} color="#ffffff" />)}
       <pointLight position={[-6, 1, -2]} intensity={40} distance={14} color="#aab6ff" />
       <pointLight position={[6, 1, -2]} intensity={30} distance={14} color="#ffc9c0" />
       {LOOKS.map((l, i) => <Model key={l.title} look={l} i={i} progress={progress} />)}
@@ -95,7 +96,7 @@ export default function ShowScene({ progress }: { progress: React.MutableRefObje
   return (
     <Canvas dpr={[1, 1.4]} camera={{ fov: 38, position: [0, -0.5, 12] }} gl={{ toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.15 }}>
       <color attach="background" args={["#050506"]} />
-      <fog attach="fog" args={["#050506", 14, 36]} />
+      <fog attach="fog" args={["#050506", 20, 48]} />
       <ambientLight intensity={0.45} />
       <Environment resolution={128}>
         <Lightformer form="rect" intensity={4} position={[0, 7, 0]} scale={[12, 6, 1]} rotation-x={Math.PI / 2} />
