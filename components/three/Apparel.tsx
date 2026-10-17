@@ -236,8 +236,8 @@ export default function Apparel({ garment, color, material, stitching = true, un
       const fit = (pts: number[][]) => {
         if (!under) return pts;
         const r0 = pts[0], r1 = pts[1];
-        const first = [r0[0] * 0.8, r0[1], r0[2], r0[3] * 0.72, (r0[4] ?? r0[3] * 0.92) * 0.72];
-        const mid = r0.map((v, i) => (v + (r1[i] ?? v)) / 2); mid[0] *= 0.9; mid[3] *= 0.84; mid[4] = ((r0[4] ?? r0[3] * 0.92) + (r1[4] ?? r1[3] * 0.92)) / 2 * 0.84;
+        const first = [r0[0] * 0.75, r0[1], r0[2], r0[3] * 0.64, (r0[4] ?? r0[3] * 0.92) * 0.64];
+        const mid = r0.map((v, i) => (v + (r1[i] ?? v)) / 2); mid[0] *= 0.84; mid[3] *= 0.68; mid[4] = ((r0[4] ?? r0[3] * 0.92) + (r1[4] ?? r1[3] * 0.92)) / 2 * 0.68;
         return [first, mid, ...pts.slice(1)];
       };
       const leg = (s: number) => limb(fit(cargo
