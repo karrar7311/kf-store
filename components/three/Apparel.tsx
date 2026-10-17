@@ -216,7 +216,7 @@ export default function Apparel({ garment, color, material, stitching = true, un
       both(limb([[1.09, -.96, .24, .15], [1.1, -1.12, .26, .145], [1.1, -1.26, .28, .14]], { fold: 0.004, cap: "end" }), "r");
       extras.push({ kind: "neckrib" });
     } else if (garment === "vest") {
-      T = [[1.5, .25, .21], [1.38, .26, .21], [1.29, .34, .23], [1.16, .47, .27], [.95, .50, .31], [.6, .45, .32], [.2, .50, .34], [-.5, .60, .38], [-.9, .68, .40], [-1.3, .68, .39]];
+      T = [[1.5, .25, .21], [1.38, .26, .21], [1.29, .38, .24], [1.16, .52, .29], [.95, .58, .33], [.6, .60, .34], [.2, .62, .36], [-.5, .65, .38], [-.9, .68, .40], [-1.3, .68, .39]];
       add(torso(T, { fold: S * 0.5, baffle: 0.06 }));
       // armhole trim
       extras.push({ kind: "armholes" });
@@ -228,14 +228,23 @@ export default function Apparel({ garment, color, material, stitching = true, un
       extras.push({ kind: "buttons", n: 9 }, { kind: "wings" });
     } else if (garment === "pants" || garment === "shorts") {
       const shorts = garment === "shorts";
-      T = [[1.52, .70, .34], [1.40, .71, .34], [1.27, .70, .34]];
+      const k = under ? 0.8 : 1;
+      T = [[1.52, .70 * k, .34 * k], [1.40, .71 * k, .34 * k], [1.27, .70 * k, .34 * k]];
       add(torso(T, { fold: 0.005 }));
       const cargo = !shorts && material === "cotton";
-      const leg = (s: number) => limb(cargo
+      // when worn under a top, shrink the hip rings so nothing pokes through the top's fabric
+      const fit = (pts: number[][]) => {
+        if (!under) return pts;
+        const r0 = pts[0], r1 = pts[1];
+        const first = [r0[0] * 0.8, r0[1], r0[2], r0[3] * 0.72, (r0[4] ?? r0[3] * 0.92) * 0.72];
+        const mid = r0.map((v, i) => (v + (r1[i] ?? v)) / 2); mid[0] *= 0.9; mid[3] *= 0.84; mid[4] = ((r0[4] ?? r0[3] * 0.92) + (r1[4] ?? r1[3] * 0.92)) / 2 * 0.84;
+        return [first, mid, ...pts.slice(1)];
+      };
+      const leg = (s: number) => limb(fit(cargo
         ? [[s * .33, 1.32, 0, .42, .37], [s * .38, .5, .01, .38, .34], [s * .36, -.5, .02, .31, .29], [s * .34, -1.3, .02, .26, .25], [s * .33, -1.62, .02, .24, .23]]
-        : [[s * .33, 1.32, 0, .42, .37], [s * .37, .5, .01, .37, .33], [s * .34, -.5, .02, .30, .28], [s * .32, -1.3, .02, .24, .23], [s * .31, -1.5, .02, .20, .20]], { fold: S * 1.4, cap: "end" });
+        : [[s * .33, 1.32, 0, .42, .37], [s * .37, .5, .01, .37, .33], [s * .34, -.5, .02, .30, .28], [s * .32, -1.3, .02, .24, .23], [s * .31, -1.5, .02, .20, .20]]), { fold: S * 1.4, cap: "end" });
       if (shorts) {
-        const sl = (s: number) => limb([[s * .33, 1.32, 0, .42, .37], [s * .38, .5, .01, .40, .36], [s * .38, -.2, .02, .38, .34], [s * .37, -.62, .02, .37, .33]], { fold: S * 0.45, cap: "end" });
+        const sl = (s: number) => limb(fit([[s * .33, 1.32, 0, .42, .37], [s * .38, .5, .01, .40, .36], [s * .38, -.2, .02, .38, .34], [s * .37, -.62, .02, .37, .33]]), { fold: S * 0.45, cap: "end" });
         add(sl(1)); add(sl(-1));
       } else { add(leg(1)); add(leg(-1)); }
       if (!cargo && !shorts) for (const s of [-1, 1]) add(limb([[s * .31, -1.46, .02, .19, .19], [s * .31, -1.58, .02, .185, .185], [s * .31, -1.72, .02, .18, .18]], { fold: 0.004, cap: "end" }), "r");
@@ -332,14 +341,14 @@ export default function Apparel({ garment, color, material, stitching = true, un
           case "buttons": return (
             <group key={i}>{Array.from({ length: e.n ?? 7 }, (_, k) => { const y = 1.05 - k * (e.n ? 0.4 : 0.33); return <mesh key={k} position={[0, y, rzAt(T, y).z + 0.014]} rotation={[Math.PI / 2, 0, 0]} material={metal}><cylinderGeometry args={[0.032, 0.032, 0.02, 20]} /></mesh>; })}</group>
           );
-          case "armholes": return [-1, 1].map((s) => <mesh key={`ah${s}`} position={[s * 0.5, 0.78, 0]} rotation={[0, Math.PI / 2, 0]} scale={[1.15, 1, 1]} material={rib}><torusGeometry args={[0.3, 0.03, 12, 40]} /></mesh>);
+          case "armholes": return [-1, 1].map((s) => <mesh key={`ah${s}`} position={[s * 0.56, 0.78, 0]} rotation={[0, Math.PI / 2, 0]} scale={[1.15, 1, 1]} material={rib}><torusGeometry args={[0.3, 0.03, 12, 40]} /></mesh>);
           case "wings": return [-1, 1].map((s) => <mesh key={`w${s}`} position={[s * 0.2, 1.26, 0.2]} rotation={[0.55, 0, s * -0.6]} castShadow material={fabric}><boxGeometry args={[0.36, 0.2, 0.035]} /></mesh>);
           case "pockets": return [-1, 1].map((s) => <RoundedBox key={`p${s}`} args={[0.3, 0.035, 0.03]} radius={0.012} smoothness={3} rotation={[0, 0, s * 0.18]} position={[s * 0.33, 0.52, rzAt(T, 0.52).z + 0.008]} material={rib} />);
           case "cargo": return [-1, 1].map((s) => (
             <group key={`g${s}`}>
-              <RoundedBox args={[0.3, 0.46, 0.07]} radius={0.025} smoothness={4} position={[s * 0.4, -0.18, 0.36]} castShadow material={fabric} />
-              <RoundedBox args={[0.32, 0.14, 0.085]} radius={0.025} smoothness={4} position={[s * 0.4, 0.02, 0.365]} castShadow material={fabric} />
-              <mesh position={[s * 0.4, 0.02, 0.41]} material={metal}><cylinderGeometry args={[0.025, 0.025, 0.012, 16]} /></mesh>
+              <RoundedBox args={[0.3, 0.46, 0.05]} radius={0.025} smoothness={4} position={[s * 0.36, -0.18, 0.32]} castShadow material={fabric} />
+              <RoundedBox args={[0.32, 0.14, 0.06]} radius={0.025} smoothness={4} position={[s * 0.36, 0.02, 0.325]} castShadow material={fabric} />
+              <mesh position={[s * 0.36, 0.02, 0.358]} rotation={[Math.PI / 2, 0, 0]} material={metal}><cylinderGeometry args={[0.025, 0.025, 0.012, 16]} /></mesh>
             </group>));
           case "drawcord": return [-1, 1].map((s) => (
             <group key={`d${s}`}><mesh position={[s * 0.1, 1.0, 0.36]}><cylinderGeometry args={[0.012, 0.012, 0.5, 8]} /><meshStandardMaterial color={dark} roughness={0.8} /></mesh>

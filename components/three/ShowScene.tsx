@@ -70,7 +70,8 @@ function Stage({ progress }: { progress: React.MutableRefObject<number> }) {
     const t = s.clock.elapsedTime;
     s.camera.position.x = Math.sin(t * 0.25) * 0.6;
     s.camera.position.y = -0.5 + Math.sin(t * 0.4) * 0.08;
-    s.camera.position.z = 12 - progress.current * 1.5;
+    const asp = s.size.width / s.size.height;
+    s.camera.position.z = (asp < 0.8 ? 17 : asp < 1.2 ? 14 : 12) - progress.current * 1.5;
     s.camera.lookAt(0, -0.9, -6);
   });
   return (

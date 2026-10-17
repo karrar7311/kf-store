@@ -9,10 +9,10 @@ export interface Outfit { top: Piece; bottom: Piece; acc: Piece[]; skin: string;
 /** Where each accessory sits on the figure (figure space, matches Mannequin). */
 export function Placed({ p }: { p: Piece }) {
   switch (p.garment) {
-    case "cap": return <group position={[0, 2.02, 0.0]} scale={0.36} rotation={[0.08, 0, 0]}><Garment3D {...p} /></group>;
-    case "beanie": return <group position={[0, 2.0, 0.0]} scale={0.3}><Garment3D {...p} /></group>;
-    case "sunglasses": return <group position={[0, 1.86, 0.3]} scale={0.23} rotation={[0.04, 0, 0]}><Garment3D {...p} /></group>;
-    case "scarf": return <group position={[0, 0.58, 0.04]} scale={0.6}><Garment3D {...p} /></group>;
+    case "cap": return <group position={[0, 2.1, 0.0]} scale={0.42} rotation={[0.08, 0, 0]}><Garment3D {...p} /></group>;
+    case "beanie": return <group position={[0, 2.08, 0.0]} scale={0.35}><Garment3D {...p} /></group>;
+    case "sunglasses": return <group position={[0, 1.94, 0.37]} scale={0.27} rotation={[0.04, 0, 0]}><Garment3D {...p} /></group>;
+    case "scarf": return <group position={[0, 0.62, 0.04]} scale={0.62}><Garment3D {...p} /></group>;
     case "belt": return <group position={[0, -0.32, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[0.66, 0.5, 0.66]}><Garment3D {...p} worn /></group>;
     case "tote": return <group position={[1.18, -1.52, 0.18]} scale={0.38} rotation={[0, -0.3, 0]}><Garment3D {...p} /></group>;
     default: return null;

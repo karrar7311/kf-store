@@ -11,7 +11,7 @@ export default function Mannequin({ skin = "#c99a7a", hair = "#1b1511" }: { skin
   const geo = useMemo(() => {
     const t = prof([[1.3, 0.3, 0.2], [1.2, 0.5, 0.25], [0.9, 0.55, 0.28], [0.2, 0.54, 0.27], [-0.4, 0.51, 0.26], [-0.7, 0.5, 0.25]]);
     const torso = loft(t.map((q) => new V(0, q.x, 0)), t.map((q) => q.y), t.map((q) => q.z), { seg: 40, fold: 0, cap: "end" });
-    const arm = limb([[0.46, 0.98, 0, 0.15], [0.84, 0.7, 0.02, 0.135], [1.02, 0.12, 0.1, 0.115], [1.07, -0.6, 0.2, 0.095], [1.09, -1.0, 0.24, 0.08]], { fold: 0, cap: "end", seg: 24 });
+    const arm = limb([[0.46, 0.98, 0, 0.19], [0.84, 0.7, 0.02, 0.17], [1.02, 0.12, 0.1, 0.15], [1.07, -0.6, 0.2, 0.12], [1.09, -1.0, 0.24, 0.1]], { fold: 0, cap: "end", seg: 24 });
     const leg = limb([[0.3, -0.5, 0, 0.3, 0.27], [0.31, -1.5, 0, 0.23, 0.21], [0.31, -2.8, 0, 0.16, 0.15], [0.31, -3.68, 0.02, 0.13, 0.13]], { fold: 0, cap: "both", seg: 24 });
     return { torso, arm, armL: mirror(arm), leg, legL: mirror(leg) };
   }, []);
@@ -27,12 +27,12 @@ export default function Mannequin({ skin = "#c99a7a", hair = "#1b1511" }: { skin
       <mesh geometry={geo.leg} material={skinMat} /><mesh geometry={geo.legL} material={skinMat} />
       {/* neck + head */}
       <mesh position={[0, 1.46, 0.0]} material={skinMat}><cylinderGeometry args={[0.105, 0.125, 0.4, 24]} /></mesh>
-      <mesh position={[0, 1.86, 0.02]} scale={[0.9, 1.14, 1]} material={skinMat} castShadow><sphereGeometry args={[0.33, 40, 32]} /></mesh>
-      <mesh position={[0, 1.82, 0.34]} scale={[1, 1.2, 0.8]} material={skinMat}><sphereGeometry args={[0.04, 16, 12]} /></mesh>
-      {[-1, 1].map((s) => <mesh key={s} position={[s * 0.3, 1.84, 0.02]} scale={[0.4, 1, 0.7]} material={skinMat}><sphereGeometry args={[0.07, 16, 12]} /></mesh>)}
-      <mesh position={[0, 1.96, -0.02]} rotation={[-0.25, 0, 0]} scale={[0.93, 1.1, 1.04]} material={hairMat}><sphereGeometry args={[0.34, 40, 28, 0, Math.PI * 2, 0, Math.PI * 0.5]} /></mesh>
+      <mesh position={[0, 1.92, 0.02]} scale={[0.9, 1.14, 1]} material={skinMat} castShadow><sphereGeometry args={[0.39, 40, 32]} /></mesh>
+      <mesh position={[0, 1.88, 0.4]} scale={[1, 1.2, 0.8]} material={skinMat}><sphereGeometry args={[0.04, 16, 12]} /></mesh>
+      {[-1, 1].map((s) => <mesh key={s} position={[s * 0.35, 1.9, 0.02]} scale={[0.4, 1, 0.7]} material={skinMat}><sphereGeometry args={[0.07, 16, 12]} /></mesh>)}
+      <mesh position={[0, 2.03, -0.02]} rotation={[-0.25, 0, 0]} scale={[0.93, 1.1, 1.04]} material={hairMat}><sphereGeometry args={[0.4, 40, 28, 0, Math.PI * 2, 0, Math.PI * 0.5]} /></mesh>
       {/* hands */}
-      {[-1, 1].map((s) => <mesh key={s} position={[s * 1.1, -1.2, 0.27]} scale={[0.085, 0.16, 0.055]} material={skinMat} castShadow><sphereGeometry args={[1, 20, 16]} /></mesh>)}
+      {[-1, 1].map((s) => <mesh key={s} position={[s * 1.1, -1.16, 0.27]} scale={[0.1, 0.17, 0.065]} material={skinMat} castShadow><sphereGeometry args={[1, 20, 16]} /></mesh>)}
       {/* sneakers */}
       {[-1, 1].map((s) => (
         <group key={s} position={[s * 0.31, -3.84, 0.14]}>
